@@ -209,7 +209,7 @@ export const ShopSidebar: React.FC<ShopSidebarProps> = ({
                 </Link>
                 
                 {/* Submenu Items */}
-                {!isCollapsed && hasSubItems && isExpanded && (
+                {!effectiveIsCollapsed && hasSubItems && isExpanded && (
                   <div className={styles.subMenuContainer}>
                     {item.subItems?.map((sub, idx) => {
                       const isSubActive = pathname === sub.href;
