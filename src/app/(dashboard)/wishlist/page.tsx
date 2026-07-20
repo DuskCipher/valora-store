@@ -39,7 +39,7 @@ export default function WishlistPage() {
       if (error) {
         console.error("Error fetching wishlist:", error);
       } else if (data) {
-        const mappedProducts: Product[] = data.map((item: any) => ({
+        let mappedProducts: Product[] = data.map((item: any) => ({
           id: item.id,
           name: item.name,
           description: item.description || "",
@@ -73,6 +73,35 @@ export default function WishlistPage() {
           demoUrl: item.preview_url || "",
           slug: item.slug,
         }));
+
+        // Compute real sales from transactions to fix 0 sales bug
+        try {
+          const { data: txs } = await supabase
+            .from("transactions")
+            .select("details")
+            .eq("type", "order")
+            .eq("status", "approved");
+            
+          if (txs) {
+            const salesMap: Record<string, number> = {};
+            txs.forEach((t: any) => {
+              const items = t.details?.items || [];
+              items.forEach((item: any) => {
+                const pid = item.product?.id || item.id;
+                if (pid) {
+                  salesMap[pid] = (salesMap[pid] || 0) + (item.quantity || 1);
+                }
+              });
+            });
+            
+            mappedProducts = mappedProducts.map(p => ({
+              ...p,
+              sold: Math.max(p.sold, salesMap[p.id] || 0)
+            }));
+          }
+        } catch (e) {
+          console.error("Error computing real sales:", e);
+        }
 
         setProducts(mappedProducts);
       }

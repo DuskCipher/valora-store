@@ -15,10 +15,10 @@ export default function PrivacyPolicyPage() {
           mengenai pengumpulan, penggunaan dan pengungkapan informasi pribadi Anda, juga sebagai
           acuan untuk mengatur dan melindungi setiap informasi pribadi yang Anda sampaikan pada saat
           registrasi serta informasi pribadi yang Anda berikan melalui koresponden, chatting ataupun yang
-          berasal dari layanan atau situs lain. "Informasi Pribadi" adalah informasi tentang Anda yang dapat
+          berasal dari layanan atau situs lain. &quot;Informasi Pribadi&quot; adalah informasi tentang Anda yang dapat
           diidentifikasi secara pribadi kepada Anda, seperti nama, alamat tinggal, alamat email, nomor
           telepon, nomor ponsel, nomor rekening bank, juga informasi aktivitas transaksi Anda di
-          Valora Store ("seperti penawaran produk digital, pengerjaan produk digital, penjualan serta
+          Valora Store (&quot;seperti penawaran produk digital, pengerjaan produk digital, penjualan serta
           pembelian produk digital) yang berhubungan dengan akun Anda.
         </p>
         <p>

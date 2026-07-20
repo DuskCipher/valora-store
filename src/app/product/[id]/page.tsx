@@ -85,6 +85,37 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         console.error("Error fetching product:", error);
         setProduct(null);
       } else {
+        // Compute real sales from transactions
+        let realSold = data.sold || 0;
+        let realDownloads = data.downloads || 0;
+        
+        try {
+          const { data: txs } = await supabase
+            .from("transactions")
+            .select("details")
+            .eq("type", "order")
+            .eq("status", "approved");
+            
+          if (txs) {
+            let computedSold = 0;
+            txs.forEach((t: any) => {
+              const items = t.details?.items || [];
+              items.forEach((item: any) => {
+                if ((item.product?.id || item.id) === data.id) {
+                  computedSold += (item.quantity || 1);
+                }
+              });
+            });
+            // If computed is greater than static, use computed
+            if (computedSold > realSold) {
+              realSold = computedSold;
+              realDownloads = computedSold;
+            }
+          }
+        } catch (e) {
+          console.error("Error fetching real sales:", e);
+        }
+
         const mapped: Product = {
           id: data.id,
           name: data.name,
@@ -92,8 +123,8 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           price: (data.discount_price && Number(data.discount_price) < Number(data.price)) ? Number(data.discount_price) : Number(data.price),
           originalPrice: (data.discount_price && Number(data.discount_price) < Number(data.price)) ? Number(data.price) : undefined,
           rating: data.rating || 0.0,
-          sold: data.sold || 0,
-          downloads: data.downloads || 0,
+          sold: realSold,
+          downloads: realDownloads,
           views: (data.views || 0) + 1,
           images: data.image_urls && data.image_urls.length > 0 ? data.image_urls : (data.image_url ? [data.image_url] : ["https://via.placeholder.com/600"]),
           seller: {
