@@ -11,7 +11,8 @@
   position: absolute;
   top: calc(100% + 8px);
   right: -60px; /* Default desktop offset */
-  background-color: white;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   width: 320px;
@@ -46,7 +47,7 @@
 
 .tabsContainer {
   display: flex;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tabBtn {
@@ -57,7 +58,7 @@
   border-bottom: 2px solid transparent;
   font-size: 14px;
   font-weight: 700;
-  color: #475569;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -100,7 +101,7 @@
 .emptyIcon::before, .emptyIcon::after {
   content: "";
   position: absolute;
-  border: 3px solid #e2e8f0;
+  border: 3px solid var(--border-color);
   border-radius: 50%;
   border-left-color: transparent;
   border-bottom-color: transparent;
@@ -125,7 +126,7 @@
 .emptyText {
   font-size: 14px;
   font-weight: 700;
-  color: #64748b;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -134,7 +135,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border-color);
 }
 
 .footerBtnLeft {
@@ -156,7 +157,7 @@
   border: none;
   font-size: 13px;
   font-weight: 600;
-  color: #94a3b8; /* lighter color for mark all as read */
+  color: var(--text-muted); /* lighter color for mark all as read */
   cursor: pointer;
   padding: 0;
 }

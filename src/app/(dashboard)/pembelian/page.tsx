@@ -12,6 +12,7 @@ export default function PembelianPage() {
   const { supabaseUser } = useAuth();
   const [purchases, setPurchases] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [latestLinks, setLatestLinks] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
 
   // Review Modal States
@@ -39,6 +40,33 @@ export default function PembelianPage() {
 
     if (data) {
       setPurchases(data);
+
+      // Fetch latest product file_urls so previous buyers get the newest files
+      const productIds: string[] = [];
+      data.forEach((t: any) => {
+        (t.details?.items || []).forEach((item: any) => {
+           if (item.product?.id) productIds.push(item.product.id);
+        });
+      });
+      if (productIds.length > 0) {
+        const { data: latestProds } = await supabase
+          .from("products")
+          .select("id, file_url, variations")
+          .in("id", productIds);
+          
+        if (latestProds) {
+          const links: Record<string, string> = {};
+          latestProds.forEach((p: any) => {
+             if (p.file_url) links[p.id] = p.file_url;
+             if (p.variations && Array.isArray(p.variations)) {
+               p.variations.forEach((v: any) => {
+                 if (v.file_url) links[`${p.id}_${v.id}`] = v.file_url;
+               });
+             }
+          });
+          setLatestLinks(links);
+        }
+      }
     }
 
     const { data: reviewsData } = await supabase
@@ -161,7 +189,7 @@ export default function PembelianPage() {
                 <div className={styles.purchaseCardRight}>
                   <div className={styles.purchaseActions}>
                     <a 
-                      href={item.product?.downloadUrl || item.product?.demoUrl || "#"} 
+                      href={latestLinks[`${item.product?.id}_${item.variation?.id}`] || latestLinks[item.product?.id] || item.product?.downloadUrl || item.product?.demoUrl || "#"} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={styles.purchaseAccessBtn}

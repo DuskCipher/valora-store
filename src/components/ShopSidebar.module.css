@@ -227,12 +227,13 @@
 }
 
 /* Dark mode */
-[data-theme="dark"] .menuItem:hover {
+:global([data-theme="dark"]) .menuItem:hover {
   background-color: #334155;
+  color: var(--text-main);
 }
 
-[data-theme="dark"] .active {
-  background-color: rgba(16, 185, 129, 0.1);
+:global([data-theme="dark"]) .active {
+  background-color: rgba(16, 185, 129, 0.15);
   color: #34d399;
   border-left-color: #34d399;
 }
@@ -290,6 +291,10 @@
 .subActive {
   color: var(--primary);
   font-weight: 600;
+}
+
+:global([data-theme="dark"]) .subActive {
+  color: #34d399;
 }
 
 

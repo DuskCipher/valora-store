@@ -477,7 +477,7 @@
 }
 
 .rowLabel {
-  color: #475569;
+  color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 12px;
