@@ -714,6 +714,20 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                 return;
               }
               
+              // Handle category_id which must be a UUID
+              let finalCategoryId = categoryId;
+              if (categoryId && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(categoryId)) {
+                // Try to find the category by name
+                const { data: catData } = await supabase.from('categories').select('id').eq('name', categoryId).single();
+                if (catData) {
+                  finalCategoryId = catData.id;
+                } else {
+                  // Try to insert if it doesn't exist
+                  const { data: newCat } = await supabase.from('categories').insert({ name: categoryId }).select().single();
+                  finalCategoryId = newCat ? newCat.id : null;
+                }
+              }
+
               // 2. Update produk
               const { error: updateError } = await supabase
                 .from('products')
@@ -721,13 +735,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   name: name,
                   description: description || "Deskripsi produk",
                   faq: faqContent,
-                  price: price,
+                  price: priceType === "free" ? 0 : price,
                   stock: stock,
                   is_active: status === "published",
                   status: status,
                   tags: tags,
                   product_type: productType,
-                  category_id: categoryId,
+                  category_id: finalCategoryId,
                   is_instant: instantDelivery,
                   delivery_time: instantDelivery ? null : deliveryTime,
                   preview_url: previewUrl,
