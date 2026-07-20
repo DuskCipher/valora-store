@@ -1,0 +1,162 @@
+.balanceCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 4px;
+  padding: 24px 32px;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.balanceInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.balanceIcon {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanceLabel {
+  font-size: 13px;
+  margin: 0 0 4px 0;
+  opacity: 0.85;
+}
+
+.balanceAmount {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.balanceActions {
+  display: flex;
+  gap: 12px;
+}
+
+.depositBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background-color: white;
+  color: #059669;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.depositBtn:hover {
+  background-color: #f0fdf4;
+  transform: translateY(-1px);
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.statIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statIconGreen {
+  background-color: #ecfdf5;
+  color: #10b981;
+}
+
+.statIconRed {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 4px 0;
+}
+
+.statValue {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.tabsContainer {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0;
+}
+
+.tabBtn {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabBtn:hover {
+  color: var(--text-main);
+}
+
+.activeTab {
+  color: #10b981;
+  border-bottom-color: #10b981;
+  font-weight: 600;
+}
+
+.tabContent {
+  min-height: 300px;
+}
+
+@media (max-width: 768px) {
+  .balanceCard {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .balanceAmount {
+    font-size: 22px;
+  }
+
+  .statsRow {
+    grid-template-columns: 1fr;
+  }
+}

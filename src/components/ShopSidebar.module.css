@@ -1,0 +1,390 @@
+.sidebar {
+  width: 210px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* Hide scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+.sidebar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Logo Area */
+.logoContainer {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.collapsed .logoContainer {
+  padding: 0;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.logoText {
+  margin-left: 8px;
+  font-weight: 800;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.logoAccent {
+  color: var(--primary);
+}
+
+/* Profile Area */
+.profileContainer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.collapsed .profileContainer {
+  padding: 20px 0;
+  align-items: center;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.verifiedBadge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background-color: #ef4444; /* Red verify badge from screenshot */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.profileName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileEmail {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileBalance {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.penaltyBadge {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.noPenalty {
+  background-color: #10b981;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0 20px 16px;
+  border-top: 1px dashed var(--border-color);
+  background: none;
+}
+
+/* Menu Area */
+.menuLabel {
+  padding: 0 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+  position: relative;
+  white-space: nowrap;
+}
+
+.collapsed .menuItem {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.menuItem:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.active {
+  background-color: #ecfdf5;
+  color: #10b981;
+  border-left: 3px solid #10b981;
+  font-weight: 600;
+}
+
+.collapsed .active {
+  border-left: none;
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.arrow {
+  margin-left: auto;
+  font-size: 16px;
+  color: var(--text-light);
+}
+
+/* Dark mode */
+[data-theme="dark"] .menuItem:hover {
+  background-color: #334155;
+}
+
+[data-theme="dark"] .active {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-left-color: #34d399;
+}
+
+/* Submenu Styles */
+.menuGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.subMenuContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 42px; /* Indent to align with the text */
+  margin-top: 4px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+/* Vertical dotted line */
+.subMenuContainer::before {
+  content: "";
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 15px;
+  width: 1px;
+  border-left: 1px dashed var(--border-color);
+}
+
+.subMenuItem {
+  padding: 8px 12px 8px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+/* Horizontal dotted line connecting to vertical */
+.subMenuItem::before {
+  content: "";
+  position: absolute;
+  left: -13px;
+  top: 16px;
+  width: 12px;
+  height: 1px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.subMenuItem:hover {
+  color: var(--text-main);
+}
+
+.subActive {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+
+
+
+/* Mobile close button - hidden on desktop */
+.mobileCloseBtn {
+  display: none;
+}
+
+/* Mobile overlay */
+.mobileOverlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Sidebar hidden by default on mobile, slides in from left */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 270px !important;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+    overflow-y: auto;
+  }
+
+  /* Sidebar open state on mobile */
+  .sidebar.mobileOpen {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Show mobile close button */
+  .mobileCloseBtn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    width: 100%;
+  }
+
+  .mobileCloseBtn:hover {
+    color: var(--text-main);
+  }
+
+  /* Show overlay */
+  .mobileOverlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Keep profile, logo etc visible in mobile drawer */
+  .logoContainer, .profileContainer, .divider, .menuLabel {
+    display: flex;
+  }
+
+  .menuLabel {
+    display: block;
+  }
+
+  .divider {
+    display: block;
+  }
+
+  .nav {
+    flex-direction: column;
+    overflow-x: unset;
+  }
+
+  .menuItem {
+    padding: 12px 20px;
+    border-left: 3px solid transparent;
+    border-bottom: none;
+  }
+
+  .active {
+    border-left: 3px solid var(--primary);
+    border-bottom: none;
+  }
+}
+

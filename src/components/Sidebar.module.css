@@ -1,0 +1,128 @@
+.sidebar {
+  width: 210px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  min-height: calc(100vh - 70px);
+  padding: 12px 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+
+.menuItem:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.active {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+  border-left: 3px solid var(--primary);
+  font-weight: 600;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .menuItem:hover {
+  background-color: #334155;
+}
+
+[data-theme="dark"] .active {
+  background-color: #334155;
+}
+
+.mobileDropdownToggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    border-right: none;
+    padding: 0;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 50; /* ensure it goes above page content */
+  }
+  
+  .mobileDropdownToggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .nav {
+    display: none; /* hidden by default */
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    max-height: 350px;
+    overflow-y: auto;
+  }
+  
+  .navOpen {
+    display: flex; /* show when open */
+  }
+  
+  .nav::-webkit-scrollbar {
+    width: 6px;
+  }
+  .nav::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+  }
+  
+  .menuItem {
+    padding: 14px 16px;
+    border-left: 3px solid transparent;
+    border-bottom: 1px solid var(--border-color);
+    white-space: normal;
+  }
+  
+  .menuItem:last-child {
+    border-bottom: none;
+  }
+  
+  .active {
+    border-left: 3px solid var(--primary);
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .active:last-child {
+    border-bottom: none;
+  }
+}

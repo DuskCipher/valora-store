@@ -1,0 +1,25 @@
+﻿
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : [{"id":"8134af79-b05f-4939-86d5-6c09129c3ede","store_id":"15c6ef0c-38d7-4e06-8a12-9c5b737259b3","ca
+                    tegory_id":null,"name":"valoranime","description":"valoranime","price":10000,"stock":3,"image_url":
+                    "h...
+RawContent        : HTTP/1.1 200 OK
+                    vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+                    Connection: keep-alive
+                    Keep-Alive: timeout=5
+                    Transfer-Encoding: chunked
+                    Content-Type: application/json
+                    Date: Mon, 20 Jul 2...
+Forms             : {}
+Headers           : {[vary, RSC, Next-Router-State-Tree, Next-Router-Prefetch], [Connection, keep-alive], [Keep-Alive, 
+                    timeout=5], [Transfer-Encoding, chunked]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 1450
+
+
+

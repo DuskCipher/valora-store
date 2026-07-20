@@ -1,0 +1,198 @@
+/* Additional Product Detail CSS appended to existing detail.module.css */
+
+/* Info Card (Right Col) */
+.infoCard {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.infoCardHeader {
+  padding: 16px 20px 8px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #475569;
+  letter-spacing: 0.5px;
+}
+
+.cardRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.cardRow:last-child {
+  border-bottom: none;
+}
+
+.rowLabel {
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rowLabel svg {
+  color: var(--primary);
+}
+
+.rowValue {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.rowValueLink {
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+
+.rowValueLink:hover {
+  text-decoration: underline;
+}
+
+/* Tag Card */
+.tagCard {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tagLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.5px;
+}
+
+.tagGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background-color: var(--bg-input);
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* Share and Reviews */
+.shareAndReviews {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.shareSection {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.shareText {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.shareButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.shareBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-muted);
+  transition: var(--transition-fast);
+}
+
+.shareBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.shareBtnCopy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.shareBtnCopy:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.reviewsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reviewsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reviewsTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.reviewsFilter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-main);
+  background: transparent;
+  border: none;
+  font-weight: 500;
+}
+
+.noReviews {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 16px;
+}

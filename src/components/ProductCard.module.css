@@ -1,0 +1,269 @@
+.card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-color-hover);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden;
+  background-color: #f1f5f9;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+/* Badges floating on top of image */
+.badgeLeft {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 5;
+}
+
+.badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.badgeGreen {
+  background-color: var(--primary);
+}
+
+.badgeRed {
+  background-color: var(--danger);
+}
+
+.badgeSlate {
+  background-color: #64748b;
+}
+
+.instantBadgeFloating {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  z-index: 5;
+}
+
+/* Hover overlay showing Preview and Detail */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: 6;
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.overlayAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.overlayIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.overlayIcon:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* Info Section */
+.info {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  position: relative;
+  z-index: 10;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.4;
+  height: 34px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.sellerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.sellerInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.sellerAvatar {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background-color: #cbd5e1;
+  color: #334155;
+  font-weight: 700;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sellerName {
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.sellerName:hover {
+  color: var(--primary);
+}
+
+.priceContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.price {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.priceFree {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.originalPrice {
+  font-size: 9px;
+  color: var(--text-light);
+  text-decoration: line-through;
+}
+
+.footerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding: 8px 12px;
+  background-color: #fafafa;
+  font-size: 10px;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 10;
+}
+
+.footerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stars {
+  display: flex;
+  color: #fbbf24;
+}
+
+.starFilled {
+  fill: #fbbf24;
+}
+
+.starEmpty {
+  color: var(--text-light);
+}
+
+.salesCount {
+  font-weight: 500;
+}

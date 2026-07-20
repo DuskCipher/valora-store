@@ -1,0 +1,130 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 4px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: #ffffff;
+  cursor: text;
+  transition: border-color 0.2s;
+}
+
+.inputWrapper.focused {
+  border-color: #10b981;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+  align-items: center;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #4ade80;
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.removeBtn:hover {
+  opacity: 1;
+}
+
+.input {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  padding: 4px;
+  font-size: 14px;
+  color: #1e293b;
+  background: transparent;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+  color: #94a3b8;
+}
+
+.clearAllBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px;
+  transition: color 0.2s;
+}
+
+.clearAllBtn:hover {
+  color: #64748b;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: #cbd5e1;
+}
+
+.chevron {
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+  padding: 4px 0;
+}
+
+.createOption {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.createOption:hover {
+  background-color: #f1f5f9;
+}

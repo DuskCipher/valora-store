@@ -1,0 +1,166 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -60px; /* Default desktop offset */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  z-index: 201;
+  animation: dropdownFade 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .dropdown {
+    position: fixed;
+    top: 70px;
+    right: 5%;
+    width: 90%;
+    max-width: 340px;
+    left: 5%;
+    margin: 0 auto;
+  }
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tabsContainer {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  color: #10b981;
+}
+
+.activeTab {
+  color: #10b981;
+  border-bottom-color: #10b981;
+}
+
+.content {
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.emptyIcon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pseudo elements to create the vibration rings like the screenshot (optional) */
+.emptyIcon::before, .emptyIcon::after {
+  content: "";
+  position: absolute;
+  border: 3px solid #e2e8f0;
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.emptyIcon::before {
+  width: 30px;
+  height: 30px;
+  top: 5px;
+  left: 0px;
+  transform: rotate(-45deg);
+}
+
+.emptyIcon::after {
+  width: 30px;
+  height: 30px;
+  top: 5px;
+  right: 0px;
+  transform: rotate(135deg);
+}
+
+.emptyText {
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footerBtnLeft {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #10b981;
+  cursor: pointer;
+  padding: 0;
+}
+
+.footerBtnLeft:hover {
+  text-decoration: underline;
+}
+
+.footerBtnRight {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8; /* lighter color for mark all as read */
+  cursor: pointer;
+  padding: 0;
+}
+
+.footerBtnRight:hover {
+  color: #10b981;
+}

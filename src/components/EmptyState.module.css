@@ -1,0 +1,47 @@
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 0 48px;
+  text-align: center;
+  width: 100%;
+}
+
+.emptyIconWrapper {
+  background-color: #f1f5f9;
+  width: 140px;
+  height: 100px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.emptyIconWrapper::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  right: 12px;
+  height: 24px;
+  background-color: #e2e8f0;
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+.emptyStateTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 12px 0;
+}
+
+.emptyStateDesc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}

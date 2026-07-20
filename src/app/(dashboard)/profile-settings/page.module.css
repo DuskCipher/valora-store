@@ -1,0 +1,212 @@
+.profileCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.avatarLarge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid #10b981;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.avatarName {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.avatarEmail {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.changeAvatarBtn {
+  margin-top: 8px;
+  padding: 6px 16px;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: fit-content;
+}
+
+.changeAvatarBtn:hover {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.formCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 28px 32px;
+}
+
+.formTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroupFull {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.formLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.formInput {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--text-main);
+  background-color: var(--bg-input, var(--bg-main));
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.formInput:focus {
+  border-color: #10b981;
+}
+
+.formTextarea {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--text-main);
+  background-color: var(--bg-input, var(--bg-main));
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color var(--transition-fast);
+}
+
+.formTextarea:focus {
+  border-color: #10b981;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.saveBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.saveBtn:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+.cameraIcon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--primary, #10b981);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--bg-card);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .avatarSection {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .avatarInfo {
+    align-items: center;
+  }
+
+  .cameraIcon {
+    display: none;
+  }
+  
+  .profileCard, .formCard {
+    padding: 16px;
+  }
+
+  .formTitle {
+    font-size: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+}

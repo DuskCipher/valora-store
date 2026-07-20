@@ -1,0 +1,120 @@
+.editorWrapper {
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-card, #fff);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-input, #f8fafc);
+}
+
+.toolbarBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-muted, #64748b);
+  font-size: 13px;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.toolbarBtn:hover {
+  background-color: var(--border-color, #e2e8f0);
+  color: var(--text-main, #1e293b);
+}
+
+.toolbarBtn:active {
+  background-color: var(--primary, #10b981);
+  color: white;
+  transform: scale(0.95);
+}
+
+.toolbarSelect {
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  background: var(--bg-card, #fff);
+  color: var(--text-main, #1e293b);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.toolbarSelect:hover {
+  border-color: var(--primary, #10b981);
+}
+
+.toolbarDivider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color, #e2e8f0);
+  margin: 0 4px;
+}
+
+.editorBody {
+  min-height: 150px;
+  padding: 16px;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-main, #1e293b);
+  overflow-y: auto;
+}
+
+.editorBody:empty::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted, #94a3b8);
+  pointer-events: none;
+}
+
+/* Styles for content inside the editor */
+.editorBody h1 {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.editorBody h2 {
+  font-size: 1.4em;
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+.editorBody h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin: 6px 0;
+}
+
+.editorBody blockquote {
+  border-left: 3px solid var(--primary, #10b981);
+  padding-left: 12px;
+  margin: 8px 0;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+}
+
+.editorBody ul,
+.editorBody ol {
+  padding-left: 24px;
+  margin: 8px 0;
+}
+
+.editorBody a {
+  color: var(--primary, #10b981);
+  text-decoration: underline;
+}

@@ -1,0 +1,220 @@
+.container {
+  padding: 32px 40px;
+  background-color: var(--bg-main);
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}
+
+/* Tabs */
+.tabsContainer {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 28px;
+}
+
+.tabBtn {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabBtn:hover {
+  color: var(--text-main);
+}
+
+.activeTab {
+  color: #10b981;
+  border-bottom-color: #10b981;
+  font-weight: 600;
+}
+
+/* Form Layout */
+.formLayout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.formSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.formInput {
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--text-main);
+  background-color: var(--bg-card);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.formInput:focus {
+  border-color: #10b981;
+}
+
+.formSelect {
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--text-main);
+  background-color: var(--bg-card);
+  outline: none;
+  appearance: auto;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.formSelect:focus {
+  border-color: #10b981;
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.checkbox {
+  margin-top: 3px;
+  accent-color: #10b981;
+  flex-shrink: 0;
+}
+
+.checkboxLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.submitBtn:hover {
+  background-color: #059669;
+}
+
+/* Saldo Card */
+.saldoCard {
+  width: 300px;
+  flex-shrink: 0;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.saldoIconRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.saldoIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.saldoAmountBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.saldoAmount {
+  font-size: 22px;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.saldoCount {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.saldoTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
+}
+
+.saldoDesc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .formLayout {
+    flex-direction: column;
+  }
+  
+  .saldoCard {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+  }
+}
