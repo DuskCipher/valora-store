@@ -472,12 +472,12 @@ export default function ShopDashboardPage() {
         </div>
 
         {recentOrders.length > 0 ? (
-          <div style={{ background: "var(--bg-card)", borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+          <div style={{ background: "var(--bg-card)", borderRadius: 8, overflowX: "auto", border: "1px solid var(--border-color)" }}>
+            <table style={{ width: "100%", minWidth: "700px", borderCollapse: "collapse", textAlign: "left" }}>
               <thead>
                 <tr style={{ backgroundColor: "var(--bg-main)" }}>
                   <th style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: 13 }}>Tanggal</th>
-                  <th style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: 13 }}>Produk</th>
+                  <th style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: 13, minWidth: "200px" }}>Produk</th>
                   <th style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: 13 }}>Pembeli</th>
                   <th style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: 13 }}>Total</th>
                   <th style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: 13 }}>Status</th>
@@ -487,7 +487,19 @@ export default function ShopDashboardPage() {
                 {recentOrders.map((o, idx) => (
                   <tr key={`${o.id}-${idx}`} style={{ borderBottom: "1px solid var(--border-color)" }}>
                     <td style={{ padding: "14px 16px", fontSize: 13 }}>{new Date(o.created_at).toLocaleDateString("id-ID")}</td>
-                    <td style={{ padding: "14px 16px", fontSize: 13, fontWeight: "600" }}>{o.product_name}</td>
+                    <td style={{ padding: "14px 16px", fontSize: 13, fontWeight: "600" }}>
+                      <div style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "normal",
+                        wordBreak: "break-word"
+                      }}>
+                        {o.product_name}
+                      </div>
+                    </td>
                     <td style={{ padding: "14px 16px", fontSize: 13 }}>{o.buyer_name}</td>
                     <td style={{ padding: "14px 16px", fontSize: 13, fontWeight: "600", color: "var(--primary)" }}>{formatPrice(o.total)}</td>
                     <td style={{ padding: "14px 16px" }}>

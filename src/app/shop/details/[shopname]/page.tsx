@@ -97,10 +97,38 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
             demoUrl: item.preview_url || "",
             slug: item.slug
           }));
+          // Fetch real sales data from transactions
+          const productIds = mappedProducts.map((p: any) => p.id);
+          if (productIds.length > 0) {
+            const { data: txs } = await supabase
+              .from("transactions")
+              .select("status, details")
+              .eq("type", "order")
+              .eq("status", "approved");
+              
+            if (txs) {
+              let salesMap: Record<string, number> = {};
+              txs.forEach((t: any) => {
+                const items = t.details?.items || [];
+                items.forEach((item: any) => {
+                  const pid = item.product?.id || item.id;
+                  if (productIds.includes(pid)) {
+                    if (!salesMap[pid]) salesMap[pid] = 0;
+                    salesMap[pid] += (item.quantity || 1);
+                  }
+                });
+              });
+              
+              // Update mapped products with real sales
+              mappedProducts.forEach(p => {
+                p.sold = salesMap[p.id] || p.sold || 0;
+              });
+            }
+          }
+
           setProducts(mappedProducts);
 
           // Fetch Reviews for all products in this store
-          const productIds = mappedProducts.map((p: any) => p.id);
           if (productIds.length > 0) {
             const { data: txReviews } = await supabase
               .from("transactions")

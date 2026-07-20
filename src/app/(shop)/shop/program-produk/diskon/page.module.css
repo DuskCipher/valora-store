@@ -469,6 +469,7 @@
 .discountAmount {
   font-weight: 700;
   color: #ef4444;
+  white-space: nowrap;
 }
 
 /* Discounted price */

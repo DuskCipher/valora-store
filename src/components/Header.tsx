@@ -306,8 +306,17 @@ export const Header: React.FC = () => {
           >
             <div className={styles.left}><Grid size={18} /> Categories</div>
           </Link>
-          <Link href="#" className={styles.sidebarItem} onClick={() => setIsMobileSidebarOpen(false)}>
+          <Link 
+            href="#" 
+            className={styles.sidebarItem} 
+            onClick={(e) => {
+              e.preventDefault();
+              alert("Fitur SMM Panel sedang dalam pengembangan.");
+            }}
+            style={{ justifyContent: 'space-between' }}
+          >
             <div className={styles.left}><MessageSquare size={18} /> SMM Panel</div>
+            <span style={{ fontSize: '10px', backgroundColor: 'var(--primary)', color: 'white', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>Coming Soon</span>
           </Link>
         </div>
         

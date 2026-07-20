@@ -300,10 +300,9 @@ export default function CheckoutPage() {
                 {/* Remove button */}
                 <button
                   className={styles.removeItemBtn}
-                  onClick={() =>
-                    removeFromCart(item.product.id, item.variation?.id)
-                  }
-                  title="Hapus item"
+                  disabled
+                  title="Item tidak dapat dihapus di halaman Checkout"
+                  style={{ cursor: "not-allowed", opacity: 0.5 }}
                 >
                   <Trash2 size={16} />
                 </button>
