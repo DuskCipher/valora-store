@@ -5,9 +5,19 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
-import { Product, CATEGORIES } from "@/data/products";
+import { Product } from "@/data/products";
 import { Star, XCircle, Search, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
 import styles from "./page.module.css";
+
+const CATEGORIES = [
+  "Semua",
+  "Website",
+  "Ebook",
+  "Graphic Design",
+  "Akun Digital",
+  "Web Design & Templates",
+  "Source Code"
+];
 
 interface StoreProfile {
   id: string;
