@@ -272,8 +272,8 @@ export default function ShopPenarikanPage() {
           {isLoading ? (
             <div style={{ padding: "40px 0", textAlign: "center", color: "var(--text-muted)" }}>Memuat data...</div>
           ) : history.length > 0 ? (
-            <div style={{ background: "var(--bg-card)", borderRadius: 8, border: "1px solid var(--border-color)", overflow: "hidden" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+            <div style={{ background: "var(--bg-card)", borderRadius: 8, border: "1px solid var(--border-color)", overflowX: "auto" }}>
+              <table style={{ width: "100%", minWidth: "700px", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
                   <tr style={{ backgroundColor: "var(--bg-main)" }}>
                     <th style={{ padding: 16, borderBottom: "1px solid var(--border-color)", fontSize: 13, color: "var(--text-muted)" }}>Tanggal</th>

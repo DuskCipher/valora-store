@@ -87,11 +87,15 @@ export default function ProdukAndaPage() {
             }
           }
 
-          const updatedProducts = productsData.map(p => ({
-            ...p,
-            sold: salesMap[p.id]?.count || p.sold || 0, // Prioritaskan data real transaksi
-            real_total_nominal: salesMap[p.id]?.total || 0 // Simpan total nominal riil
-          }));
+          const updatedProducts = productsData.map(p => {
+            const realSold = salesMap[p.id]?.count || p.sold || 0;
+            return {
+              ...p,
+              sold: realSold, // Prioritaskan data real transaksi
+              stock: Math.max(0, (p.stock || 0) - (salesMap[p.id]?.count || 0)), // Kurangi stok dengan jumlah yang benar-benar terjual
+              real_total_nominal: salesMap[p.id]?.total || 0 // Simpan total nominal riil
+            };
+          });
 
           setProducts(updatedProducts);
         }

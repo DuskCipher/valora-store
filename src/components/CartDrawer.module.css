@@ -16,7 +16,7 @@
   bottom: 0;
   width: 100%;
   max-width: 380px;
-  background-color: white;
+  background-color: var(--bg-card);
   z-index: 1001;
   display: flex;
   flex-direction: column;
@@ -147,7 +147,7 @@
 .quantityControls {
   display: flex;
   align-items: center;
-  background-color: #f1f5f9;
+  background-color: var(--bg-input);
   border-radius: var(--radius-full);
   padding: 2px 4px;
 }
@@ -163,7 +163,7 @@
   cursor: pointer;
   border-radius: var(--radius-full);
   color: #64748b;
-  background-color: #e2e8f0;
+  background-color: var(--bg-card);
 }
 
 .qtyBtn:hover {
@@ -182,7 +182,7 @@
 .footer {
   padding: 30px;
   border-top: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--bg-card);
   display: flex;
   flex-direction: column;
   gap: 20px;

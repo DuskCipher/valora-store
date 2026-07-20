@@ -31,7 +31,7 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({ onToggleSidebar, hideCar
       </div>
 
       <div className={styles.rightSection}>
-        <Link href="/" className={styles.exploreBtn}>
+        <Link href="/products" className={styles.exploreBtn}>
           Jelajahi Produk
         </Link>
 

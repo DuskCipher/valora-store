@@ -274,7 +274,7 @@
 
 .description {
   font-size: 14px;
-  color: #334155;
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -291,7 +291,7 @@
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
-  color: #334155;
+  color: var(--text-muted);
 }
 
 .checkIcon {
@@ -402,7 +402,7 @@
 .btnSecondary {
   flex: 1;
   border: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--bg-card);
   color: var(--text-main);
   padding: 14px 20px;
   border-radius: var(--radius-sm);
@@ -450,7 +450,8 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow: hidden;
-  background-color: white;
+  background-color: var(--bg-card);
+  flex-shrink: 0;
   box-shadow: var(--shadow-sm);
 }
 
@@ -506,7 +507,7 @@
 
 /* Tag Card */
 .tagCard {
-  background-color: white;
+  background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 16px 20px;
@@ -550,8 +551,8 @@
   align-items: center;
   gap: 30px;
   padding: 24px 0;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .shareText {
@@ -573,7 +574,7 @@
   height: 40px;
   border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--bg-card);
   color: var(--text-muted);
   transition: var(--transition-fast);
 }
@@ -591,7 +592,7 @@
   height: 40px;
   border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--bg-card);
   color: var(--text-muted);
   font-size: 13px;
   font-weight: 500;
@@ -614,7 +615,7 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 16px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .reviewsTitle {

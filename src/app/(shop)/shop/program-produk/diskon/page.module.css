@@ -455,6 +455,16 @@
   font-weight: 600;
 }
 
+.productNameText {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+}
+
 /* Discount amount */
 .discountAmount {
   font-weight: 700;

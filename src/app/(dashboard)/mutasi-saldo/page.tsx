@@ -87,7 +87,7 @@ export default function MutasiSaldoPage() {
           </div>
         ) : history.length > 0 ? (
           <div style={{ background: "var(--bg-card)", borderRadius: 8, border: "1px solid var(--border-color)", overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+            <table style={{ width: "100%", minWidth: "700px", borderCollapse: "collapse", textAlign: "left" }}>
               <thead>
                 <tr style={{ backgroundColor: "var(--bg-main)" }}>
                   <th style={{ padding: 16, borderBottom: "1px solid var(--border-color)", fontSize: 13, color: "var(--text-muted)" }}>Tanggal</th>

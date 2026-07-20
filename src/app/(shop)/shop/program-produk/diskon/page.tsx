@@ -335,8 +335,8 @@ export default function DiskonPage() {
                   return (
                     <tr key={d.id}>
                       <td className={styles.productName}>
-                        <Tag size={14} style={{ marginRight: 6, opacity: 0.5 }} />
-                        {d.products?.name || "-"}
+                        <Tag size={14} style={{ marginRight: 6, opacity: 0.5, flexShrink: 0 }} />
+                        <span className={styles.productNameText}>{d.products?.name || "-"}</span>
                       </td>
                       <td>{d.product_variations?.name || <span style={{ opacity: 0.4 }}>Semua</span>}</td>
                       <td>{formatCurrency(d.product_variations?.price ?? d.products?.price ?? 0)}</td>

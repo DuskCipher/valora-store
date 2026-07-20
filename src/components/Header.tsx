@@ -61,9 +61,9 @@ export const Header: React.FC = () => {
       {/* Top Bar info */}
       <div className={styles.topBar}>
         <div className={styles.topBarLeft}>
-          <Link href="#" className={styles.topLink}>Hubungi Kami</Link>
-          <span className={styles.topLink}>admin@valora.com</span>
-          <Link href="#" className={styles.topLink}>Artikel</Link>
+          <Link href="/contact-us" className={styles.topLink}>Hubungi Kami</Link>
+          <a href="mailto:admin@valora.com" className={styles.topLink}>admin@valora.com</a>
+          <Link href="/blog" className={styles.topLink}>Artikel</Link>
         </div>
         <div className={styles.topBarRight}>
           <div className={styles.langSwitch}>
@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
       {/* Main Navigation Bar */}
       <div className={styles.mainNav}>
         {/* Logo */}
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo} onClick={() => setSearchTerm("")}>
           <ValoraLogo size={24} isDark={theme === "dark"} />
           <span style={{ marginLeft: "8px" }}>Valora Store_</span>
         </Link>
@@ -254,7 +254,7 @@ export const Header: React.FC = () => {
       {/* Mobile Bottom Navigation */}
       {!isDashboardArea && (
         <div className={styles.bottomNav}>
-          <Link href="/" className={`${styles.bottomNavItem} ${styles.active}`}>
+          <Link href="/" className={`${styles.bottomNavItem} ${styles.active}`} onClick={() => setSearchTerm("")}>
             <Home size={20} />
           </Link>
           <button className={styles.bottomNavItem}>
@@ -279,7 +279,7 @@ export const Header: React.FC = () => {
       ></div>
       <div className={`${styles.mobileSidebar} ${isMobileSidebarOpen ? styles.open : ""}`}>
         <div className={styles.sidebarHeader}>
-          <Link href="/" className={styles.logo} onClick={() => setIsMobileSidebarOpen(false)}>
+          <Link href="/" className={styles.logo} onClick={() => { setIsMobileSidebarOpen(false); setSearchTerm(""); }}>
             <ValoraLogo size={24} isDark={theme === "dark"} />
             <span style={{ marginLeft: "8px" }}>Valora Store_</span>
           </Link>
@@ -289,7 +289,7 @@ export const Header: React.FC = () => {
         </div>
         
         <div className={styles.sidebarMenu}>
-          <Link href="/" className={styles.sidebarItem} onClick={() => setIsMobileSidebarOpen(false)}>
+          <Link href="/" className={styles.sidebarItem} onClick={() => { setIsMobileSidebarOpen(false); setSearchTerm(""); }}>
             <div className={styles.left}><Home size={18} /> Home</div>
           </Link>
           <Link 

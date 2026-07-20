@@ -33,7 +33,7 @@ export default function ContactUsPage() {
                 <div>
                   <span className={styles.contactLabel}>Alamat</span>
                   <span className={styles.contactValue}>
-                    Jl. leuwiliang, Bogor, Jawa Barat,<br />Indonesia
+                    Purwokerto, Jawa Tengah,<br />Indonesia
                   </span>
                 </div>
               </div>
@@ -45,7 +45,7 @@ export default function ContactUsPage() {
                 <div>
                   <span className={styles.contactLabel}>Telepon</span>
                   <span className={styles.contactValue}>
-                    6282298859671
+                    085600685685
                   </span>
                 </div>
               </div>
@@ -57,7 +57,7 @@ export default function ContactUsPage() {
                 <div>
                   <span className={styles.contactLabel}>Email</span>
                   <span className={styles.contactValue}>
-                    admin@m-pedia.co.id
+                    admin@valora.com
                   </span>
                 </div>
               </div>

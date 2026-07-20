@@ -59,11 +59,11 @@ export const Footer: React.FC = () => {
           <div className={styles.linkGroup}>
             <h3 className={styles.linkTitle}>Indeks</h3>
             <div className={styles.linkList}>
-              <Link href="#" className={styles.linkItem}>Home</Link>
-              <Link href="#" className={styles.linkItem}>Products</Link>
-              <Link href="#" className={styles.linkItem}>Shop area</Link>
-              <Link href="#" className={styles.linkItem}>Ppob</Link>
-              <Link href="#" className={styles.linkItem}>Top Shop</Link>
+              <Link href="/" className={styles.linkItem}>Home</Link>
+              <Link href="/products" className={styles.linkItem}>Products</Link>
+              <Link href="/shop/dashboard" className={styles.linkItem}>Shop area</Link>
+              <Link href="/topup" className={styles.linkItem}>Ppob</Link>
+              <Link href="/products" className={styles.linkItem}>Top Shop</Link>
             </div>
           </div>
           <div className={styles.linkGroup}>
@@ -72,7 +72,7 @@ export const Footer: React.FC = () => {
               <Link href="/contact-us" className={styles.linkItem}>Contact Us</Link>
               <Link href="/help/privacy" className={styles.linkItem}>Privacy</Link>
               <Link href="/help/terms" className={styles.linkItem}>Terms</Link>
-              <Link href="#" className={styles.linkItem}>Blog</Link>
+              <Link href="/blog" className={styles.linkItem}>Blog</Link>
               <Link href="/help/affiliate" className={styles.linkItem}>Affiliate</Link>
             </div>
           </div>

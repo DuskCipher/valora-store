@@ -246,7 +246,7 @@ export default function ProfileSettingsPage() {
               value={formData.email}
               disabled
               className={styles.formInput}
-              style={{ backgroundColor: "#f1f5f9", cursor: "not-allowed" }}
+              style={{ backgroundColor: "var(--bg-input)", cursor: "not-allowed", opacity: 0.7 }}
             />
           </div>
 
