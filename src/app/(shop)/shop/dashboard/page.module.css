@@ -41,7 +41,7 @@
 
 .filterPills {
   display: flex;
-  background-color: #f8fafc;
+  background-color: var(--bg-main);
   border-radius: 20px;
   padding: 4px;
   gap: 4px;
@@ -58,7 +58,7 @@
 }
 
 .pill:hover {
-  background-color: #f1f5f9;
+  background-color: var(--bg-hover);
   color: var(--text-main);
 }
 
@@ -100,7 +100,7 @@
 .iconBg {
   width: 48px;
   height: 48px;
-  background-color: #f8fafc;
+  background-color: var(--bg-main);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -252,7 +252,7 @@
 }
 
 .emptyIconWrapper {
-  background-color: #f1f5f9;
+  background-color: var(--bg-hover);
   width: 120px;
   height: 90px;
   border-radius: 12px;
@@ -288,4 +288,5 @@
   color: var(--text-muted);
   margin: 0;
 }
+
 

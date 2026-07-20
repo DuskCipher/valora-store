@@ -2,20 +2,20 @@
   display: flex;
   flex-direction: column;
   padding: 32px 40px;
-  background-color: #f8fafc;
+  background-color: var(--bg-main);
   min-height: 100vh;
 }
 
 .pageTitle {
   font-size: 20px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-main);
   margin: 0 0 24px 0;
 }
 
 .tabsContainer {
   display: flex;
-  border-bottom: 1px solid #cbd5e1;
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 32px;
   gap: 32px;
 }
@@ -24,14 +24,14 @@
   padding: 12px 0;
   font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color: var(--text-muted);
   text-decoration: none;
   position: relative;
   transition: color 0.2s;
 }
 
 .tabLink:hover {
-  color: #1e293b;
+  color: var(--text-main);
 }
 
 .tabLinkActive {
@@ -56,17 +56,17 @@
 .section {
   display: flex;
   gap: 0;
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed var(--border-color);
   border-radius: 4px;
   margin-bottom: 24px;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
 }
 
 .sectionLeft {
   width: 340px;
   flex-shrink: 0;
   padding: 32px;
-  border-right: 1px dashed #cbd5e1;
+  border-right: 1px dashed var(--border-color);
 }
 
 .sectionRight {
@@ -77,20 +77,20 @@
 .sectionTitle {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-main);
   margin: 0 0 8px 0;
 }
 
 .sectionDesc {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 0;
 }
 
 .formCard {
-  background-color: #ffffff;
-  border: 1px dashed #cbd5e1;
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
   border-radius: 4px;
   padding: 32px;
   margin-bottom: 24px;
@@ -104,20 +104,20 @@
   display: block;
   font-size: 13px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-main);
   margin-bottom: 8px;
 }
 
 .formInput, .formTextarea, .formSelect {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
-  color: #1e293b;
+  color: var(--text-main);
   outline: none;
   transition: border-color 0.2s;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   box-sizing: border-box;
 }
 
@@ -171,7 +171,7 @@
 
 /* Upload Area */
 .uploadArea {
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed var(--border-color);
   border-radius: 6px;
   padding: 40px 20px;
   display: flex;
@@ -180,7 +180,7 @@
   justify-content: center;
   gap: 12px;
   cursor: pointer;
-  background-color: #fafafa;
+  background-color: var(--bg-input);
 }
 
 .uploadIcon {
@@ -191,12 +191,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .uploadText {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -207,7 +207,7 @@
 
 .uploadFormats {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .imagePreview {
@@ -216,7 +216,7 @@
   height: 100px;
   border-radius: 8px;
   object-fit: cover;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
 }
 
 @media (max-width: 900px) {
@@ -229,7 +229,7 @@
   .sectionLeft {
     width: 100%;
     border-right: none;
-    border-bottom: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed var(--border-color);
     padding: 24px;
   }
   .sectionRight {
@@ -255,3 +255,4 @@
     padding: 16px;
   }
 }
+

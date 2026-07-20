@@ -1,13 +1,13 @@
 .container {
   padding: 32px 40px;
-  background-color: #f8fafc;
+  background-color: var(--bg-main);
   min-height: 100vh;
 }
 
 .pageTitle {
   font-size: 20px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-main);
   margin: 0 0 32px 0;
 }
 
@@ -15,17 +15,17 @@
 .section {
   display: flex;
   gap: 0;
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed var(--border-color);
   border-radius: 4px;
   margin-bottom: 32px;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
 }
 
 .sectionLeft {
   width: 340px;
   flex-shrink: 0;
   padding: 32px;
-  border-right: 1px dashed #cbd5e1;
+  border-right: 1px dashed var(--border-color);
 }
 
 .sectionRight {
@@ -36,20 +36,20 @@
 .sectionTitle {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-main);
   margin: 0 0 8px 0;
 }
 
 .sectionDesc {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 0;
 }
 
 /* Upload Area */
 .uploadArea {
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed var(--border-color);
   border-radius: 6px;
   padding: 40px 20px;
   display: flex;
@@ -59,7 +59,7 @@
   gap: 12px;
   cursor: pointer;
   transition: border-color 0.2s;
-  background-color: #fafafa;
+  background-color: var(--bg-input);
 }
 
 .uploadArea:hover {
@@ -74,12 +74,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .uploadText {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -91,7 +91,7 @@
 
 .uploadFormats {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* Form */
@@ -103,7 +103,7 @@
   display: block;
   font-size: 13px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-main);
   margin-bottom: 8px;
 }
 
@@ -114,13 +114,13 @@
 .formInput {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
-  color: #1e293b;
+  color: var(--text-main);
   outline: none;
   transition: border-color 0.2s;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   box-sizing: border-box;
 }
 
@@ -131,13 +131,13 @@
 .formSelect {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-muted);
   outline: none;
   appearance: none;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
@@ -152,13 +152,13 @@
 
 .formHint {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
 /* Rich Text Editor Toolbar */
 .editorContainer {
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -169,7 +169,7 @@
   gap: 2px;
   padding: 8px 12px;
   border-bottom: 1px solid #e2e8f0;
-  background-color: #fafafa;
+  background-color: var(--bg-input);
   flex-wrap: wrap;
 }
 
@@ -184,7 +184,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  color: #475569;
+  color: var(--text-muted);
   transition: background-color 0.15s;
 }
 
@@ -197,7 +197,7 @@
   border: none;
   background: none;
   font-size: 13px;
-  color: #475569;
+  color: var(--text-muted);
   cursor: pointer;
   outline: none;
 }
@@ -213,13 +213,13 @@
   min-height: 120px;
   padding: 16px;
   font-size: 14px;
-  color: #1e293b;
+  color: var(--text-main);
   outline: none;
 }
 
 .editorBody:empty::before {
   content: attr(data-placeholder);
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .aiGenBtn {
@@ -271,7 +271,7 @@
 
 .checkboxLabel {
   font-size: 14px;
-  color: #1e293b;
+  color: var(--text-main);
   font-weight: 500;
 }
 
@@ -328,7 +328,7 @@
   height: 18px;
   border-radius: 50%;
   background-color: #e2e8f0;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 11px;
   font-weight: 700;
   margin-left: 6px;
@@ -346,11 +346,11 @@
 .saveDraftBtn {
   padding: 12px 28px;
   background: none;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-weight: 600;
   font-size: 14px;
-  color: #475569;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -383,7 +383,7 @@
   .sectionLeft {
     width: 100%;
     border-right: none;
-    border-bottom: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed var(--border-color);
   }
   .formRow {
     flex-direction: column;
@@ -399,3 +399,4 @@
     padding: 20px 16px;
   }
 }
+
