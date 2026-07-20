@@ -76,6 +76,23 @@ export const ShopSidebar: React.FC<ShopSidebarProps> = ({
     "pengaturan": false,
   });
 
+  // Auto-expand menu if a sub-item is active on mount or path change
+  useEffect(() => {
+    setExpandedMenus(prev => {
+      const next = { ...prev };
+      let changed = false;
+      menuItems.forEach(item => {
+        if (item.subItems && item.subItems.some(sub => pathname === sub.href)) {
+          if (!next[item.id]) {
+            next[item.id] = true;
+            changed = true;
+          }
+        }
+      });
+      return changed ? next : prev;
+    });
+  }, [pathname]);
+
   const toggleMenu = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     setExpandedMenus(prev => ({

@@ -5,7 +5,7 @@ import { Search, ShoppingBag, Clock, CheckCircle, XCircle, User } from "lucide-r
 import { EmptyState } from "@/components/EmptyState";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
-import styles from "../../../(dashboard)/payment-history/page.module.css";
+import styles from "./page.module.css";
 
 interface OrderItem {
   id: string;
@@ -156,14 +156,14 @@ export default function ShopPenjualanPage() {
   });
 
   return (
-    <div className={styles.container} style={{ minHeight: "auto", padding: "24px" }}>
+    <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>Penjualan Toko Saya <span className={styles.count}>({sales.length})</span></h1>
         <p className={styles.subtitle}>Kelola pesanan masuk dari pembeli produk Anda</p>
       </header>
 
       {/* Filter Tabs */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "20px", borderBottom: "1px solid var(--border-color)", paddingBottom: "8px" }}>
+      <div className={styles.tabsContainer}>
         {[
           { key: "all", label: "Semua" },
           { key: "pending", label: "Menunggu Pembayaran" },
@@ -173,16 +173,7 @@ export default function ShopPenjualanPage() {
           <button
             key={tab.key}
             onClick={() => setActiveStatusFilter(tab.key)}
-            style={{
-              padding: "8px 16px",
-              background: activeStatusFilter === tab.key ? "var(--primary)" : "none",
-              color: activeStatusFilter === tab.key ? "white" : "var(--text-muted)",
-              border: "none",
-              borderRadius: "6px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              fontSize: "13px"
-            }}
+            className={`${styles.tabBtn} ${activeStatusFilter === tab.key ? styles.tabBtnActive : styles.tabBtnInactive}`}
           >
             {tab.label}
           </button>
@@ -211,34 +202,34 @@ export default function ShopPenjualanPage() {
           filteredSales.map((s, index) => {
             const statusInfo = getStatusInfo(s.status);
             return (
-              <div key={`${s.id}-${index}`} className={styles.invoiceItem} style={{ padding: "20px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
-                <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-                  <div style={{ background: "var(--bg-input)", padding: "12px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div key={`${s.id}-${index}`} className={styles.invoiceItem}>
+                <div className={styles.invoiceLeft}>
+                  <div className={styles.iconWrapper}>
                     <ShoppingBag size={24} color="var(--primary)" />
                   </div>
                   
-                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <h3 style={{ fontSize: "15px", fontWeight: "700", color: "var(--text-main)", margin: 0 }}>{s.product_name}</h3>
-                    <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Qty: {s.quantity} | Harga: {formatPrice(s.price)}</span>
-                    <span style={{ fontSize: "12px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "4px" }}>
+                  <div className={styles.productInfo}>
+                    <h3 className={styles.productName}>{s.product_name}</h3>
+                    <span className={styles.productMeta}>Qty: {s.quantity} | Harga: {formatPrice(s.price)}</span>
+                    <span className={styles.buyerInfo}>
                       <User size={12} /> {s.buyer_name} ({s.buyer_email || "Email tidak tersedia"})
                     </span>
                   </div>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
-                  <div style={{ textAlign: "right", display: "flex", flexDirection: "column", gap: 4 }}>
-                    <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Pendapatan</span>
-                    <span style={{ fontSize: "16px", fontWeight: "700", color: "var(--primary)" }}>{formatPrice(s.total)}</span>
-                    <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>Metode: {s.payment_method}</span>
+                <div className={styles.invoiceRight}>
+                  <div className={styles.revenueInfo}>
+                    <span className={styles.revenueLabel}>Pendapatan</span>
+                    <span className={styles.revenueAmount}>{formatPrice(s.total)}</span>
+                    <span className={styles.paymentMethod}>Metode: {s.payment_method}</span>
                   </div>
                   
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: "700", padding: "4px 10px", borderRadius: "20px", background: statusInfo.bg, color: statusInfo.color }}>
+                  <div className={styles.statusWrapper}>
+                    <span className={styles.statusBadge} style={{ background: statusInfo.bg, color: statusInfo.color }}>
                       {statusInfo.icon}
                       {statusInfo.label}
                     </span>
-                    <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "monospace" }}>ID: #{s.id.slice(0, 8)}</span>
+                    <span className={styles.orderId}>ID: #{s.id.slice(0, 8)}</span>
                   </div>
                 </div>
               </div>

@@ -1,0 +1,282 @@
+.container {
+  padding: 24px;
+  background-color: var(--bg-main);
+  min-height: auto;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.count {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Filter Tabs */
+.tabsContainer {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tabsContainer::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for cleaner look */
+}
+
+.tabBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tabBtnActive {
+  background-color: var(--primary);
+  color: white;
+}
+
+.tabBtnInactive {
+  background-color: transparent;
+  color: var(--text-muted);
+}
+
+.tabBtnInactive:hover {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 16px;
+  width: 400px;
+  background-color: var(--bg-card);
+  transition: border-color var(--transition-fast);
+}
+
+.searchBox:focus-within {
+  border-color: var(--primary);
+}
+
+.searchIcon {
+  color: var(--text-light);
+  margin-right: 12px;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.invoiceList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.invoiceItem {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.invoiceLeft {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.iconWrapper {
+  background: var(--bg-input);
+  padding: 14px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.productName {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.productMeta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.buyerInfo {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.invoiceRight {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.revenueInfo {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.revenueLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.revenueAmount {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.paymentMethod {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.statusWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.orderId {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .searchBox {
+    width: 100%;
+  }
+
+  .invoiceItem {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .invoiceLeft {
+    width: 100%;
+    gap: 16px;
+  }
+
+  .iconWrapper {
+    padding: 12px;
+  }
+
+  .iconWrapper svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .productName {
+    font-size: 15px;
+  }
+
+  .invoiceRight {
+    width: 100%;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+
+  .revenueInfo {
+    text-align: left;
+  }
+
+  .statusWrapper {
+    align-items: flex-end;
+  }
+}
