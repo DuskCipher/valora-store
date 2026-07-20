@@ -277,6 +277,13 @@ export default function TambahProdukPage() {
             </label>
             <select className={styles.formSelect} value={categoryId || ""} onChange={(e) => setCategoryId(e.target.value || null)}>
               <option value="">Pilih Kategori Produk</option>
+              <option value="Semua">Semua</option>
+              <option value="Website">Website</option>
+              <option value="Ebook">Ebook</option>
+              <option value="Graphic Design">Graphic Design</option>
+              <option value="Akun Digital">Akun Digital</option>
+              <option value="Web Design & Templates">Web Design & Templates</option>
+              <option value="Source Code">Source Code</option>
             </select>
             <p className={styles.formHint}>Please select product type first</p>
           </div>
