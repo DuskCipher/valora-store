@@ -42,9 +42,7 @@ export const authService = {
       const { data, error } = await supabase
         .from("stores")
         .update(shopData)
-        .eq("owner_id", user.id)
-        .select()
-        .single();
+        .eq("owner_id", user.id);
 
       if (error) throw error;
       return data;
@@ -52,9 +50,7 @@ export const authService = {
       // Create new shop
       const { data, error } = await supabase
         .from("stores")
-        .insert([{ ...shopData, owner_id: user.id }])
-        .select()
-        .single();
+        .insert([{ ...shopData, owner_id: user.id }]);
 
       if (error) throw error;
       return data;

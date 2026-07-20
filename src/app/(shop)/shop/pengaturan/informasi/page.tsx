@@ -116,7 +116,7 @@ export default function InformasiDasarPage() {
       // Upload logo jika ada file baru
       if (logoFile) {
         const fileExt = logoFile.name.split(".").pop();
-        const fileName = `${authUser.id}/logo.${fileExt}`;
+        const fileName = `${authUser.id}/logo_${Date.now()}.${fileExt}`;
 
         const { error: uploadError } = await supabase.storage
           .from("store-logos")
