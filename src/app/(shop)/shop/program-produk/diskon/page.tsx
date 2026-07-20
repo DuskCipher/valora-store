@@ -346,7 +346,7 @@ export default function DiskonPage() {
                           : `-${formatCurrency(d.amount)}`}
                       </td>
                       <td className={styles.discountedPrice}>{formatCurrency(getDiscountedPrice(d))}</td>
-                      <td style={{ fontSize: 12 }}>
+                      <td style={{ fontSize: 12, whiteSpace: "nowrap" }}>
                         {d.start_date ? d.start_date : "—"} s/d {d.end_date ? d.end_date : "∞"}
                       </td>
                       <td>

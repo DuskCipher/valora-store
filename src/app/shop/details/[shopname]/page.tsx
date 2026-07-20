@@ -5,8 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
-import { Product } from "@/data/products";
-import { Star, XCircle, Search, ChevronDown, CheckCircle2 } from "lucide-react";
+import { Product, CATEGORIES } from "@/data/products";
+import { Star, XCircle, Search, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
 import styles from "./page.module.css";
 
 interface StoreProfile {
@@ -30,6 +30,17 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
   const [activeTab, setActiveTab] = useState("Produk");
   const [searchQuery, setSearchQuery] = useState("");
   const [storeReviews, setStoreReviews] = useState<any[]>([]);
+  
+  const [activeCategory, setActiveCategory] = useState("Semua");
+  const [ratingFilter, setRatingFilter] = useState("All");
+  const [openFilters, setOpenFilters] = useState({
+    category: true,
+    rating: true
+  });
+
+  const toggleFilter = (key: keyof typeof openFilters) => {
+    setOpenFilters(prev => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const shopNameParam = decodeURIComponent(params.shopname);
 
@@ -212,7 +223,18 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
   const totalRating = products.reduce((acc, curr) => acc + (curr.rating || 0), 0);
   const avgRating = products.length > 0 ? (totalRating / products.length).toFixed(2) : "0.00";
 
-  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  let filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  if (activeCategory !== "Semua") {
+    filteredProducts = filteredProducts.filter(p => p.category === activeCategory);
+  }
+
+  if (ratingFilter !== "All") {
+    const minRating = parseInt(ratingFilter);
+    if (!isNaN(minRating)) {
+      filteredProducts = filteredProducts.filter(p => p.rating >= minRating);
+    }
+  }
 
   return (
     <main style={{ minHeight: "100vh", backgroundColor: "var(--bg-main)" }}>
@@ -306,32 +328,56 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
                 </div>
 
                 <div className={styles.filterGroup}>
-                  <div className={styles.filterTitle}>
-                    Category <ChevronDown size={16} />
+                  <div 
+                    className={styles.filterTitle}
+                    onClick={() => toggleFilter("category")}
+                    style={{ cursor: "pointer", marginBottom: openFilters.category ? "16px" : "0" }}
+                  >
+                    Category {openFilters.category ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </div>
+                  {openFilters.category && (
+                    <div className={styles.radioGroup}>
+                      {CATEGORIES.map(cat => (
+                        <label key={cat} className={styles.radioLabel}>
+                          <input 
+                            type="radio" 
+                            name="category" 
+                            checked={activeCategory === cat} 
+                            onChange={() => setActiveCategory(cat)} 
+                          /> {cat}
+                        </label>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className={styles.filterGroup}>
-                  <div className={styles.filterTitle}>
-                    Rating <ChevronDown size={16} />
+                  <div 
+                    className={styles.filterTitle}
+                    onClick={() => toggleFilter("rating")}
+                    style={{ cursor: "pointer", marginBottom: openFilters.rating ? "16px" : "0" }}
+                  >
+                    Rating {openFilters.rating ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </div>
-                  <div className={styles.radioGroup}>
-                    <label className={styles.radioLabel}>
-                      <input type="radio" name="rating" defaultChecked /> All Rating
-                    </label>
-                    <label className={styles.radioLabel}>
-                      <input type="radio" name="rating" /> 5 stars
-                    </label>
-                    <label className={styles.radioLabel}>
-                      <input type="radio" name="rating" /> 4 stars & up
-                    </label>
-                    <label className={styles.radioLabel}>
-                      <input type="radio" name="rating" /> 3 stars & up
-                    </label>
-                    <label className={styles.radioLabel}>
-                      <input type="radio" name="rating" /> 2 stars & up
-                    </label>
-                  </div>
+                  {openFilters.rating && (
+                    <div className={styles.radioGroup}>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="rating" checked={ratingFilter === "All"} onChange={() => setRatingFilter("All")} /> All Rating
+                      </label>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="rating" checked={ratingFilter === "5"} onChange={() => setRatingFilter("5")} /> 5 stars
+                      </label>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="rating" checked={ratingFilter === "4"} onChange={() => setRatingFilter("4")} /> 4 stars & up
+                      </label>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="rating" checked={ratingFilter === "3"} onChange={() => setRatingFilter("3")} /> 3 stars & up
+                      </label>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="rating" checked={ratingFilter === "2"} onChange={() => setRatingFilter("2")} /> 2 stars & up
+                      </label>
+                    </div>
+                  )}
                 </div>
               </div>
 
