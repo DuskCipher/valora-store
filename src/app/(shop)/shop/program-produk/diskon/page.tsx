@@ -313,69 +313,71 @@ export default function DiskonPage() {
             <p className={styles.emptyDesc}>Klik &quot;Buat Diskon&quot; untuk menambahkan diskon pada produk Anda.</p>
           </div>
         ) : (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Nama Produk</th>
-                <th>Variasi</th>
-                <th>Harga Asli</th>
-                <th>Diskon</th>
-                <th>Harga Setelah Diskon</th>
-                <th>Periode</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginated.map((d) => {
-                const expired = isExpired(d.end_date);
-                const statusLabel = !d.is_active ? "Nonaktif" : expired ? "Kedaluwarsa" : "Aktif";
-                const statusClass = !d.is_active ? styles.statusInactive : expired ? styles.statusExpired : styles.statusActive;
-                return (
-                  <tr key={d.id}>
-                    <td className={styles.productName}>
-                      <Tag size={14} style={{ marginRight: 6, opacity: 0.5 }} />
-                      {d.products?.name || "-"}
-                    </td>
-                    <td>{d.product_variations?.name || <span style={{ opacity: 0.4 }}>Semua</span>}</td>
-                    <td>{formatCurrency(d.product_variations?.price ?? d.products?.price ?? 0)}</td>
-                    <td className={styles.discountAmount}>
-                      {d.discount_type === "percentage"
-                        ? `-${d.amount}%`
-                        : `-${formatCurrency(d.amount)}`}
-                    </td>
-                    <td className={styles.discountedPrice}>{formatCurrency(getDiscountedPrice(d))}</td>
-                    <td style={{ fontSize: 12 }}>
-                      {d.start_date ? d.start_date : "—"} s/d {d.end_date ? d.end_date : "∞"}
-                    </td>
-                    <td>
-                      <span className={`${styles.statusBadge} ${statusClass}`}>{statusLabel}</span>
-                    </td>
-                    <td>
-                      <div className={styles.actionBtns}>
-                        <button
-                          className={styles.toggleBtn}
-                          onClick={() => handleToggleActive(d)}
-                          title={d.is_active ? "Nonaktifkan" : "Aktifkan"}
-                        >
-                          {d.is_active
-                            ? <ToggleRight size={20} color="#10b981" />
-                            : <ToggleLeft size={20} color="#94a3b8" />}
-                        </button>
-                        <button
-                          className={styles.deleteBtn}
-                          onClick={() => handleDelete(d)}
-                          title="Hapus"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nama Produk</th>
+                  <th>Variasi</th>
+                  <th>Harga Asli</th>
+                  <th>Diskon</th>
+                  <th>Harga Setelah Diskon</th>
+                  <th>Periode</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginated.map((d) => {
+                  const expired = isExpired(d.end_date);
+                  const statusLabel = !d.is_active ? "Nonaktif" : expired ? "Kedaluwarsa" : "Aktif";
+                  const statusClass = !d.is_active ? styles.statusInactive : expired ? styles.statusExpired : styles.statusActive;
+                  return (
+                    <tr key={d.id}>
+                      <td className={styles.productName}>
+                        <Tag size={14} style={{ marginRight: 6, opacity: 0.5 }} />
+                        {d.products?.name || "-"}
+                      </td>
+                      <td>{d.product_variations?.name || <span style={{ opacity: 0.4 }}>Semua</span>}</td>
+                      <td>{formatCurrency(d.product_variations?.price ?? d.products?.price ?? 0)}</td>
+                      <td className={styles.discountAmount}>
+                        {d.discount_type === "percentage"
+                          ? `-${d.amount}%`
+                          : `-${formatCurrency(d.amount)}`}
+                      </td>
+                      <td className={styles.discountedPrice}>{formatCurrency(getDiscountedPrice(d))}</td>
+                      <td style={{ fontSize: 12 }}>
+                        {d.start_date ? d.start_date : "—"} s/d {d.end_date ? d.end_date : "∞"}
+                      </td>
+                      <td>
+                        <span className={`${styles.statusBadge} ${statusClass}`}>{statusLabel}</span>
+                      </td>
+                      <td>
+                        <div className={styles.actionBtns}>
+                          <button
+                            className={styles.toggleBtn}
+                            onClick={() => handleToggleActive(d)}
+                            title={d.is_active ? "Nonaktifkan" : "Aktifkan"}
+                          >
+                            {d.is_active
+                              ? <ToggleRight size={20} color="#10b981" />
+                              : <ToggleLeft size={20} color="#94a3b8" />}
+                          </button>
+                          <button
+                            className={styles.deleteBtn}
+                            onClick={() => handleDelete(d)}
+                            title="Hapus"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

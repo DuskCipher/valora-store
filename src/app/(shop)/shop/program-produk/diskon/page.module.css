@@ -218,6 +218,11 @@
 }
 
 /* Table (for when data exists) */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
