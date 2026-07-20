@@ -26,6 +26,7 @@ export default function TambahProdukPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [faqContent, setFaqContent] = useState("");
+  const [priceType, setPriceType] = useState<"paid" | "free">("paid");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(10);
   const [tags, setTags] = useState<string[]>([]);
@@ -334,14 +335,29 @@ export default function TambahProdukPage() {
             </div>
           )}
 
+          <div className={styles.formGroup} style={{ marginBottom: "20px" }}>
+            <label className={styles.formLabel}>Tipe Harga</label>
+            <div style={{ display: "flex", gap: "24px", marginTop: "8px" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "#64748b", cursor: "pointer" }}>
+                <input type="radio" name="priceType" value="paid" checked={priceType === "paid"} onChange={() => setPriceType("paid")} style={{ accentColor: "#10b981", width: "16px", height: "16px" }} />
+                Berbayar
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "#64748b", cursor: "pointer" }}>
+                <input type="radio" name="priceType" value="free" checked={priceType === "free"} onChange={() => { setPriceType("free"); setPrice(0); }} style={{ accentColor: "#10b981", width: "16px", height: "16px" }} />
+                Gratis
+              </label>
+            </div>
+          </div>
+
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Harga</label>
               <input 
                 type="number" 
                 className={styles.formInput} 
-                value={price}
+                value={priceType === "free" ? 0 : price}
                 onChange={(e) => setPrice(Number(e.target.value))}
+                disabled={priceType === "free"}
               />
             </div>
             <div className={styles.formGroup}>
@@ -410,12 +426,13 @@ export default function TambahProdukPage() {
                   <input 
                     type="number" 
                     className={styles.formInput} 
-                    value={variation.price} 
+                    value={priceType === "free" ? 0 : variation.price} 
                     onChange={(e) => {
                       const newVars = [...variations];
                       newVars[index].price = Number(e.target.value);
                       setVariations(newVars);
                     }} 
+                    disabled={priceType === "free"}
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -607,7 +624,7 @@ export default function TambahProdukPage() {
                   slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Math.random().toString(36).substring(2, 6),
                   description: description || "Deskripsi produk",
                   faq: faqContent,
-                  price: price,
+                  price: priceType === "free" ? 0 : price,
                   stock: stock,
                   is_active: status === "published",
                   status: status,
@@ -632,7 +649,7 @@ export default function TambahProdukPage() {
                 const variationsToInsert = variations.map((v, i) => ({
                   product_id: newProduct.id,
                   name: v.name,
-                  price: v.price,
+                  price: priceType === "free" ? 0 : v.price,
                   stock: v.stock,
                   file_url: variationFileUrls[i] || null,
                 }));

@@ -12,13 +12,13 @@ import { AuthModal } from "./AuthModal";
 import { ValoraLogo } from "./ValoraLogo";
 import { useTheme } from "@/context/ThemeContext";
 import { Home, Compass, Grid, MessageCircle, X, HelpCircle, Moon, Sun, Menu } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
   const { searchTerm, setSearchTerm, totalCartItems } = useStore();
   const { isLoggedIn, user, login, logout, hasStore } = useAuth();
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [isCartOpen, setIsCartOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const [isNotifOpen, setIsNotifOpen] = React.useState(false);
@@ -28,6 +28,15 @@ export const Header: React.FC = () => {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = React.useState(false);
 
   const pathname = usePathname();
+  const router = useRouter();
+  
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      router.push(`/products`);
+      setIsMobileSearchOpen(false); // Close mobile search row if open
+    }
+  };
+
   const isDashboardArea = pathname?.startsWith('/dashboard') || 
                           pathname?.startsWith('/payment-history') ||
                           pathname?.startsWith('/pembelian') ||
@@ -85,14 +94,15 @@ export const Header: React.FC = () => {
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
           />
         </div>
 
         {/* Action icons / CTA */}
         <div className={`${styles.navActions} ${styles.desktopOnly}`}>
-          <button className={styles.exploreBtn}>
+          <Link href="/products" className={styles.exploreBtn} style={{ textDecoration: 'none' }}>
             Jelajahi Produk <ChevronDown size={16} />
-          </button>
+          </Link>
 
           {isLoggedIn && (
             <div style={{ position: "relative" }}>
@@ -234,6 +244,7 @@ export const Header: React.FC = () => {
               className={styles.searchInput}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
               autoFocus
             />
           </div>
@@ -281,36 +292,34 @@ export const Header: React.FC = () => {
           <Link href="/" className={styles.sidebarItem} onClick={() => setIsMobileSidebarOpen(false)}>
             <div className={styles.left}><Home size={18} /> Home</div>
           </Link>
-          <div 
+          <Link 
+            href="/products"
             className={styles.sidebarItem} 
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              setIsMobileSidebarOpen(false);
-              setIsMobileSearchOpen(true);
-            }}
+            onClick={() => setIsMobileSidebarOpen(false)}
           >
             <div className={styles.left}><Compass size={18} /> Explore</div>
-          </div>
-          <div className={`${styles.sidebarItem} ${styles.hasSub}`}>
+          </Link>
+          <Link 
+            href="/products" 
+            className={styles.sidebarItem} 
+            onClick={() => setIsMobileSidebarOpen(false)}
+          >
             <div className={styles.left}><Grid size={18} /> Categories</div>
-            <ChevronDown size={16} />
-          </div>
+          </Link>
           <Link href="#" className={styles.sidebarItem} onClick={() => setIsMobileSidebarOpen(false)}>
             <div className={styles.left}><MessageSquare size={18} /> SMM Panel</div>
           </Link>
         </div>
         
         <div className={styles.sidebarFooter}>
-          <Link href="#" className={styles.sidebarItem} style={{ padding: "8px 0" }} onClick={() => setIsMobileSidebarOpen(false)}>
+          <Link href="/contact-us" className={styles.sidebarItem} style={{ padding: "8px 0" }} onClick={() => setIsMobileSidebarOpen(false)}>
             <div className={styles.left}><HelpCircle size={18} /> Contact</div>
           </Link>
           <Link href="/shop/dashboard" className={styles.sidebarItem} style={{ padding: "8px 0" }} onClick={() => setIsMobileSidebarOpen(false)}>
             <div className={styles.left}><Store size={18} /> Shop Area</div>
           </Link>
           
-          <div className={styles.themeToggle} onClick={() => {
-            // toggle theme logic here if needed, or just visual
-          }}>
+          <div className={styles.themeToggle} onClick={toggleTheme} style={{ cursor: 'pointer', padding: "8px 0", display: "flex", alignItems: "center", gap: "12px", color: "var(--text-main)" }}>
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             <span>Switch theme</span>
           </div>

@@ -69,11 +69,11 @@ export const Footer: React.FC = () => {
           <div className={styles.linkGroup}>
             <h3 className={styles.linkTitle}>Tambahan</h3>
             <div className={styles.linkList}>
-              <Link href="#" className={styles.linkItem}>Contact Us</Link>
-              <Link href="#" className={styles.linkItem}>Privacy</Link>
-              <Link href="#" className={styles.linkItem}>Terms</Link>
+              <Link href="/contact-us" className={styles.linkItem}>Contact Us</Link>
+              <Link href="/help/privacy" className={styles.linkItem}>Privacy</Link>
+              <Link href="/help/terms" className={styles.linkItem}>Terms</Link>
               <Link href="#" className={styles.linkItem}>Blog</Link>
-              <Link href="#" className={styles.linkItem}>Affiliate</Link>
+              <Link href="/help/affiliate" className={styles.linkItem}>Affiliate</Link>
             </div>
           </div>
         </div>

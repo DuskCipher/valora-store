@@ -1,0 +1,47 @@
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 48px;
+}
+
+.textContent {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.textContent p {
+  margin-bottom: 24px;
+}
+
+.textContent h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+.textContent h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.textContent ul, .textContent ol {
+  margin-bottom: 24px;
+  padding-left: 24px;
+}
+
+.textContent li {
+  margin-bottom: 8px;
+}

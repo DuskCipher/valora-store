@@ -51,6 +51,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [activeMediaIdx, setActiveMediaIdx] = useState(0);
   const [selectedVariation, setSelectedVariation] = useState<Variation | null>(null);
+  const [isProcessingFree, setIsProcessingFree] = useState(false);
   
   // Reviews state
   const [reviews, setReviews] = useState<any[]>([]);
@@ -240,11 +241,76 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     );
   }
 
-  // Find variation index if selected
   const activeVarIdx = selectedVariation 
     ? product.variations?.findIndex(v => v.id === selectedVariation.id) ?? -1
     : -1;
   const isWishlisted = product ? wishlist.includes(product.id) : false;
+
+  const currentPrice = selectedVariation
+    ? (selectedVariation.discount_price !== null && selectedVariation.discount_price !== undefined ? Number(selectedVariation.discount_price) : Number(selectedVariation.price))
+    : product?.price ?? 0;
+  
+  const isFree = currentPrice === 0;
+
+  const handleFreeCheckout = async () => {
+    if (!isLoggedIn || !supabaseUser) {
+      alert("Silakan login terlebih dahulu untuk mendapatkan produk ini.");
+      router.push("/login");
+      return;
+    }
+
+    setIsProcessingFree(true);
+    try {
+      const cartItem = {
+        product: product,
+        variation: selectedVariation,
+        quantity: 1,
+      };
+
+      const { data: txData, error } = await supabase.from("transactions").insert({
+        user_id: supabaseUser.id,
+        type: "order",
+        amount: 0,
+        status: "approved",
+        payment_method: "Gratis",
+        details: {
+          items: [cartItem],
+          service_fee: 0,
+          saldo_used: 0,
+          buyer_email: supabaseUser.email,
+          buyer_name: supabaseUser.user_metadata?.full_name || supabaseUser.email?.split("@")[0] || "User"
+        }
+      }).select();
+
+      if (error) throw error;
+
+      // Update product stock and sold count
+      if (product) {
+        const { data: currentProduct } = await supabase
+          .from("products")
+          .select("stock, sold")
+          .eq("id", product.id)
+          .single();
+          
+        if (currentProduct) {
+          await supabase
+            .from("products")
+            .update({
+              stock: Math.max(0, (currentProduct.stock || 0) - 1),
+              sold: (currentProduct.sold || 0) + 1
+            })
+            .eq("id", product.id);
+        }
+      }
+
+      const txId = txData?.[0]?.id || "";
+      router.push(`/payment/${txId}`);
+    } catch (err: any) {
+      alert("Gagal memproses transaksi: " + err.message);
+    } finally {
+      setIsProcessingFree(false);
+    }
+  };
 
   return (
     <main style={{ minHeight: "100vh", backgroundColor: "var(--bg-main)" }}>
@@ -580,13 +646,26 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
               {/* Purchase Action Buttons */}
               <div className={styles.buyActions}>
-                <button onClick={() => { addToCart(product, selectedVariation || undefined); router.push("/checkout"); }} className={styles.btnSecondary}>
-                  Beli Sekarang
-                </button>
-                <button onClick={() => { addToCart(product, selectedVariation || undefined); alert(`Berhasil menambahkan "${product.name}" ke keranjang!`); }} className={styles.btnPrimary}>
-                  <ShoppingCart size={18} />
-                  +Keranjang
-                </button>
+                {isFree ? (
+                  <button 
+                    onClick={handleFreeCheckout} 
+                    className={styles.btnSecondary} 
+                    style={{ width: "100%" }}
+                    disabled={isProcessingFree}
+                  >
+                    {isProcessingFree ? "Memproses..." : "Dapatkan Gratis"}
+                  </button>
+                ) : (
+                  <>
+                    <button onClick={() => { addToCart(product, selectedVariation || undefined); router.push("/checkout"); }} className={styles.btnSecondary}>
+                      Beli Sekarang
+                    </button>
+                    <button onClick={() => { addToCart(product, selectedVariation || undefined); alert(`Berhasil menambahkan "${product.name}" ke keranjang!`); }} className={styles.btnPrimary}>
+                      <ShoppingCart size={18} />
+                      +Keranjang
+                    </button>
+                  </>
+                )}
               </div>
 
               <a href="#" className={styles.reportBtn}>
