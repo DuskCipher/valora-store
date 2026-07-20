@@ -735,7 +735,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   name: name,
                   description: description || "Deskripsi produk",
                   faq: faqContent,
-                  price: priceType === "free" ? 0 : price,
+                  price: price,
                   stock: stock,
                   is_active: status === "published",
                   status: status,
