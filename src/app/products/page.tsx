@@ -32,8 +32,6 @@ export default function ProductsPage() {
   const [ratingFilter, setRatingFilter] = useState("All");
   const [deliveryFilter, setDeliveryFilter] = useState("All");
 
-  const [deliveryFilter, setDeliveryFilter] = useState("All");
-
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   
   const [openFilters, setOpenFilters] = useState({
