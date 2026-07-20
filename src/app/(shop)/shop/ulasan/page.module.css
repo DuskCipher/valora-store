@@ -1,0 +1,238 @@
+.container {
+  padding: 24px;
+  background-color: var(--bg-main);
+  min-height: auto;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.count {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Filter Tabs */
+.tabsContainer {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tabsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.tabBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tabBtnActive {
+  background-color: var(--primary);
+  color: white;
+}
+
+.tabBtnInactive {
+  background-color: transparent;
+  color: var(--text-muted);
+}
+
+.tabBtnInactive:hover {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 16px;
+  width: 400px;
+  background-color: var(--bg-card);
+  transition: border-color var(--transition-fast);
+}
+
+.searchBox:focus-within {
+  border-color: var(--primary);
+}
+
+.searchIcon {
+  color: var(--text-light);
+  margin-right: 12px;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reviewCard {
+  display: flex;
+  gap: 20px;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.reviewMain {
+  display: flex;
+  gap: 16px;
+  flex: 1 1 300px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviewContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reviewerHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reviewerName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.reviewDate {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.comment {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 8px 0 0 0;
+  line-height: 1.5;
+}
+
+.productSection {
+  flex-shrink: 0;
+  padding-left: 20px;
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 150px;
+}
+
+.productLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.productName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 4px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .searchBox {
+    width: 100%;
+  }
+
+  .reviewCard {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .reviewMain {
+    flex: unset;
+    width: 100%;
+  }
+
+  .productSection {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: none;
+    border-top: 1px dashed var(--border-color);
+    width: 100%;
+    min-width: unset;
+  }
+}
