@@ -90,12 +90,14 @@
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 1000px; /* Force minimum width to prevent squeezing on desktop */
 }
 
 .table th {
@@ -106,6 +108,7 @@
   color: #64748b;
   border-bottom: 1px solid #e2e8f0;
   background-color: #f8fafc;
+  white-space: nowrap; /* Prevent headers from wrapping */
 }
 
 .table td {
@@ -113,6 +116,7 @@
   font-size: 14px;
   color: #1e293b;
   border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap; /* Prevent data from wrapping excessively */
 }
 
 /* Empty State */

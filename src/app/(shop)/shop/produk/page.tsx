@@ -56,7 +56,44 @@ export default function ProdukAndaPage() {
         if (productsError) {
           console.error("Gagal mengambil data produk:", productsError);
         } else if (productsData) {
-          setProducts(productsData);
+          // 3. Ambil data penjualan asli dari tabel transactions
+          const productIds = productsData.map(p => p.id);
+          let salesMap: Record<string, { count: number, total: number }> = {};
+          
+          if (productIds.length > 0) {
+            const { data: txs } = await supabase
+              .from("transactions")
+              .select("status, details")
+              .eq("type", "order")
+              .eq("status", "approved");
+              
+            if (txs) {
+              txs.forEach((t: any) => {
+                const items = t.details?.items || [];
+                items.forEach((item: any) => {
+                  const pid = item.product?.id || item.id;
+                  if (productIds.includes(pid)) {
+                    if (!salesMap[pid]) salesMap[pid] = { count: 0, total: 0 };
+                    const qty = item.quantity || 1;
+                    const price = item.variation 
+                      ? (item.variation.discount_price ?? item.variation.price)
+                      : (item.product?.discount_price ?? item.product?.price ?? item.price ?? 0);
+                    
+                    salesMap[pid].count += qty;
+                    salesMap[pid].total += Number(price) * qty;
+                  }
+                });
+              });
+            }
+          }
+
+          const updatedProducts = productsData.map(p => ({
+            ...p,
+            sold: salesMap[p.id]?.count || p.sold || 0, // Prioritaskan data real transaksi
+            real_total_nominal: salesMap[p.id]?.total || 0 // Simpan total nominal riil
+          }));
+
+          setProducts(updatedProducts);
         }
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -160,7 +197,7 @@ export default function ProdukAndaPage() {
                     ) : "-"}
                   </td>
                   <td style={{ fontWeight: 600, color: 'var(--primary)' }}>
-                    Rp {((product.discount_price ? Number(product.discount_price) : product.price) * (product.sold || 0)).toLocaleString("id-ID")}
+                    Rp {((product as any).real_total_nominal || 0).toLocaleString("id-ID")}
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: '8px' }}>

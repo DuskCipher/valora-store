@@ -312,6 +312,31 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     }
   };
 
+  const handleCopyLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert("Tautan produk berhasil disalin!"))
+        .catch(() => alert("Gagal menyalin tautan."));
+    }
+  };
+
+  const shareToSocial = (platform: string) => {
+    if (typeof window === "undefined" || !product) return;
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(`Beli ${product.name} di Valora Store!`);
+    
+    let shareUrl = "";
+    if (platform === "facebook") {
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    } else if (platform === "twitter") {
+      shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+    } else if (platform === "linkedin") {
+      shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`;
+    }
+    
+    window.open(shareUrl, "_blank", "width=600,height=400");
+  };
+
   return (
     <main style={{ minHeight: "100vh", backgroundColor: "var(--bg-main)" }}>
       {/* Header bar */}
@@ -680,10 +705,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           <div className={styles.shareSection}>
             <span className={styles.shareText}>Share</span>
             <div className={styles.shareButtons}>
-              <button className={styles.shareBtn}><Facebook size={16} /></button>
-              <button className={styles.shareBtn}><Twitter size={16} /></button>
-              <button className={styles.shareBtn}><Linkedin size={16} /></button>
-              <button className={styles.shareBtnCopy}><Link2 size={16} /> Copy Link</button>
+              <button className={styles.shareBtn} onClick={() => shareToSocial("facebook")}><Facebook size={16} /></button>
+              <button className={styles.shareBtn} onClick={() => shareToSocial("twitter")}><Twitter size={16} /></button>
+              <button className={styles.shareBtn} onClick={() => shareToSocial("linkedin")}><Linkedin size={16} /></button>
+              <button className={styles.shareBtnCopy} onClick={handleCopyLink}><Link2 size={16} /> Copy Link</button>
             </div>
           </div>
 
