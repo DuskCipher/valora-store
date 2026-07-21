@@ -11,6 +11,7 @@ interface SlideData {
   subtitle: string;
   image: string;
   className: string;
+  is_full_width?: boolean;
 }
 
 const defaultSlides: SlideData[] = [
@@ -85,7 +86,8 @@ export const HeroCarousel: React.FC = () => {
               bulletPoints: Array.isArray(b.bullet_points) ? b.bullet_points : [],
               subtitle: b.subtitle || "",
               image: b.image_url || "",
-              className: styles.slide1
+              className: styles.slide1,
+              is_full_width: b.is_full_width || false
             }));
 
           const sideBannerData = data.find((b) => b.type === "side_banner" && !b.is_hidden);
@@ -145,42 +147,58 @@ export const HeroCarousel: React.FC = () => {
                 className={`${styles.slide} ${slide.className} ${
                   index === activeIndex ? styles.activeSlide : ""
                 }`}
+                style={slide.is_full_width ? { padding: 0 } : {}}
               >
-                <div className={styles.content}>
-                  <div className={styles.badgeRow}>
-                    {slide.badges.map((b, i) => (
-                      <span
-                        key={i}
-                        className={`${styles.badge} ${
-                          b.type === "green" ? styles.badgeGreen : styles.badgeOrange
-                        }`}
-                      >
-                        {b.text}
-                      </span>
-                    ))}
+                {slide.is_full_width ? (
+                  <div style={{ width: '100%', height: '100%', borderRadius: '16px', overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {slide.image && (
+                      <img
+                        src={slide.image}
+                        alt={slide.subtitle || 'Banner Promo'}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }}
+                      />
+                    )}
                   </div>
+                ) : (
+                  <>
+                    <div className={styles.content}>
+                      <div className={styles.badgeRow}>
+                        {slide.badges.map((b, i) => (
+                          <span
+                            key={i}
+                            className={`${styles.badge} ${
+                              b.type === "green" ? styles.badgeGreen : styles.badgeOrange
+                            }`}
+                          >
+                            {b.text}
+                          </span>
+                        ))}
+                      </div>
 
-                  <ul className={styles.titleList}>
-                    {slide.bulletPoints.map((point, i) => (
-                      <li key={i} className={styles.titleItem}>
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
+                      <ul className={styles.titleList}>
+                        {slide.bulletPoints.map((point, i) => (
+                          <li key={i} className={styles.titleItem}>
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
 
-                  <div className={styles.slideSubtitle}>{slide.subtitle}</div>
-                </div>
+                      <div className={styles.slideSubtitle}>{slide.subtitle}</div>
+                    </div>
 
-                <div className={styles.graphicContainer}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {slide.image && (
-                    <img
-                      src={slide.image}
-                      alt={slide.subtitle}
-                      className={styles.mockupImage}
-                    />
-                  )}
-                </div>
+                    <div className={styles.graphicContainer}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      {slide.image && (
+                        <img
+                          src={slide.image}
+                          alt={slide.subtitle}
+                          className={styles.mockupImage}
+                        />
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>

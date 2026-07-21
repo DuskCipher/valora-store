@@ -24,6 +24,7 @@ interface Banner {
   button_text?: string;
   order_index?: number;
   is_hidden?: boolean;
+  is_full_width?: boolean;
 }
 
 export default function AdminBannerPage() {
@@ -44,6 +45,7 @@ export default function AdminBannerPage() {
   const [carouselOrder, setCarouselOrder] = useState(0);
   const [carouselBadges, setCarouselBadges] = useState<Badge[]>([]);
   const [carouselBullets, setCarouselBullets] = useState<string[]>([]);
+  const [carouselIsFullWidth, setCarouselIsFullWidth] = useState(false);
 
   // Temp badge inputs
   const [newBadgeText, setNewBadgeText] = useState("");
@@ -150,7 +152,8 @@ export default function AdminBannerPage() {
         image_url: imageUrl,
         order_index: Number(carouselOrder),
         badges: carouselBadges,
-        bullet_points: carouselBullets
+        bullet_points: carouselBullets,
+        is_full_width: carouselIsFullWidth
       };
 
       if (currentCarouselId) {
@@ -191,6 +194,7 @@ export default function AdminBannerPage() {
     setCarouselOrder(0);
     setCarouselBadges([]);
     setCarouselBullets([]);
+    setCarouselIsFullWidth(false);
   };
 
   const handleEditCarousel = (b: Banner) => {
@@ -201,6 +205,7 @@ export default function AdminBannerPage() {
     setCarouselOrder(b.order_index || 0);
     setCarouselBadges(b.badges || []);
     setCarouselBullets(b.bullet_points || []);
+    setCarouselIsFullWidth(b.is_full_width || false);
     setCarouselImageFile(null);
   };
 
@@ -618,6 +623,19 @@ export default function AdminBannerPage() {
                       Tambah
                     </button>
                   </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px", border: "1px solid var(--border-color)", borderRadius: "8px" }}>
+                  <input
+                    type="checkbox"
+                    id="isFullWidth"
+                    checked={carouselIsFullWidth}
+                    onChange={(e) => setCarouselIsFullWidth(e.target.checked)}
+                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                  />
+                  <label htmlFor="isFullWidth" style={{ fontSize: "14px", fontWeight: "600", cursor: "pointer" }}>
+                    Gunakan Tampilan Full Gambar (Tanpa Teks)
+                  </label>
                 </div>
 
                 <button
