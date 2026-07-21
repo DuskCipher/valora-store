@@ -25,6 +25,7 @@ interface StoreProfile {
   description: string;
   logo_url: string;
   created_at: string;
+  is_verified?: boolean;
   city?: string;
   province?: string;
   postal_code?: string;
