@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Eye, EyeOff, ChevronDown, Shield } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import styles from "./AuthModal.module.css";
@@ -12,7 +12,7 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }) => {
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<"login" | "register" | "forgot_password">("login");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
@@ -34,6 +34,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
   const [isMfaMode, setIsMfaMode] = useState(false);
   const [mfaFactorId, setMfaFactorId] = useState("");
   const [mfaCode, setMfaCode] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      const savedEmail = localStorage.getItem("rememberedEmail");
+      if (savedEmail) {
+        setEmail(savedEmail);
+        setRememberMe(true);
+      } else {
+        setRememberMe(false);
+      }
+      setMode("login");
+      setErrorMsg("");
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -76,7 +90,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
     setIsLoading(true);
 
     try {
-      if (mode === "register") {
+      if (mode === "forgot_password") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        });
+        if (error) throw error;
+        alert("Tautan pemulihan kata sandi telah dikirim ke email Anda!");
+        setMode("login");
+      } else if (mode === "register") {
         if (password !== confirmPassword) {
           throw new Error("Password dan konfirmasi password tidak cocok!");
         }
@@ -129,6 +150,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
         }
         
         // If no MFA required or already completed
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
         onLogin();
         onClose();
       }
@@ -147,7 +173,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
           <X size={22} />
         </button>
 
-        <h2 className={styles.title}>Selamat Datang Kembali</h2>
+        <h2 className={styles.title}>
+          {mode === "forgot_password" ? "Lupa Kata Sandi" : "Selamat Datang Kembali"}
+        </h2>
 
         {mode === "login" ? (
           <p className={styles.subtitle}>
@@ -156,19 +184,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
               Buat akun
             </button>
           </p>
-        ) : (
+        ) : mode === "register" ? (
           <p className={styles.subtitle}>
             Sudah punya akun?{" "}
             <button className={styles.switchLink} onClick={() => setMode("login")}>
               Masuk
             </button>
           </p>
+        ) : (
+          <p className={styles.subtitle}>
+            Ingat kata sandi?{" "}
+            <button className={styles.switchLink} onClick={() => setMode("login")}>
+              Masuk
+            </button>
+          </p>
         )}
 
-        <button className={styles.googleBtn}>
-          <span className={styles.googleIcon}>G</span>
-          Masuk dengan Google
-        </button>
+        {mode !== "forgot_password" && (
+          <button className={styles.googleBtn}>
+            <span className={styles.googleIcon}>G</span>
+            Masuk dengan Google
+          </button>
+        )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
           {isMfaMode ? (
@@ -223,27 +260,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
                   className={styles.input}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
-              <div className={styles.field}>
-                <label className={styles.label}>Password</label>
-                <div className={styles.inputWrapper}>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className={styles.input}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    className={styles.eyeBtn}
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
+              {mode !== "forgot_password" && (
+                <div className={styles.field}>
+                  <label className={styles.label}>Password</label>
+                  <div className={styles.inputWrapper}>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className={styles.input}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.eyeBtn}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {mode === "register" && (
                 <>
@@ -301,11 +342,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
                     />
                     Remember me
                   </label>
-                  <button type="button" className={styles.forgotLink}>
+                  <button type="button" className={styles.forgotLink} onClick={() => setMode("forgot_password")}>
                     Lupa Kata Sandi?
                   </button>
                 </div>
-              ) : (
+              ) : mode === "register" ? (
                 <label className={styles.checkboxLabel} style={{ marginTop: "8px" }}>
                   <input
                     type="checkbox"
@@ -330,7 +371,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
           )}
 
           <button type="submit" className={styles.submitBtn} disabled={isLoading}>
-            {isLoading ? "Memproses..." : (isMfaMode ? "Verifikasi" : (mode === "login" ? "Masuk" : "Daftar"))}
+            {isLoading ? "Memproses..." : (isMfaMode ? "Verifikasi" : mode === "forgot_password" ? "Kirim Tautan" : (mode === "login" ? "Masuk" : "Daftar"))}
           </button>
         </form>
       </div>
