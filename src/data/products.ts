@@ -2,6 +2,7 @@ export interface Seller {
   name: string;
   avatar: string;
   rating: number;
+  is_verified?: boolean;
 }
 
 export interface Variation {
@@ -14,6 +15,7 @@ export interface Variation {
 
 export interface Product {
   id: string;
+  storeId?: string;
   name: string;
   description: string;
   price: number;

@@ -294,7 +294,7 @@
   padding: 16px 20px 8px;
   font-weight: 700;
   font-size: 12px;
-  color: #475569;
+  color: var(--text-main);
   letter-spacing: 0.5px;
 }
 
@@ -312,7 +312,7 @@
 }
 
 .rowLabel {
-  color: #475569;
+  color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -345,7 +345,7 @@
 .tagLabel {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-main);
 }
 
 .tagGrid {

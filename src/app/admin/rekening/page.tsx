@@ -17,6 +17,20 @@ interface PaymentAccount {
 
 const BANK_OPTIONS = ["BCA", "BRI", "BNI", "Mandiri", "BSI", "Bank Jago", "SeaBank", "QRIS", "DANA", "GoPay", "OVO"];
 
+const PAYMENT_LOGOS: Record<string, string> = {
+  "BCA": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/200px-Bank_Central_Asia.svg.png",
+  "BRI": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/200px-BANK_BRI_logo.svg.png",
+  "BNI": "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/200px-BNI_logo.svg.png",
+  "Mandiri": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/200px-Bank_Mandiri_logo_2016.svg.png",
+  "BSI": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/BSI_logo.svg/200px-BSI_logo.svg.png",
+  "Bank Jago": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Bank_Jago_logo.svg/200px-Bank_Jago_logo.svg.png",
+  "SeaBank": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Seabank_logo.png/200px-Seabank_logo.png",
+  "QRIS": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/200px-Logo_QRIS.svg.png",
+  "DANA": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Dana_logo.svg/200px-Dana_logo.svg.png",
+  "GoPay": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/200px-Gopay_logo.svg.png",
+  "OVO": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_ovo_purple.svg/200px-Logo_ovo_purple.svg.png"
+};
+
 const emptyForm = { bank_name: "BCA", account_number: "", account_holder: "", qr_image_url: "" };
 
 export default function AdminRekeningPage() {
@@ -287,7 +301,13 @@ export default function AdminRekeningPage() {
               {accounts.map(acc => (
                 <tr key={acc.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
                   <td style={{ padding: "14px 16px" }}>
-                    <span style={{ fontWeight: "700", fontSize: 15, color: "var(--text-main)" }}>{acc.bank_name}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      {PAYMENT_LOGOS[acc.bank_name] && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={PAYMENT_LOGOS[acc.bank_name]} alt={acc.bank_name} style={{ height: 24, objectFit: "contain" }} />
+                      )}
+                      <span style={{ fontWeight: "700", fontSize: 15, color: "var(--text-main)" }}>{acc.bank_name}</span>
+                    </div>
                   </td>
                   <td style={{ padding: "14px 16px" }}>
                     {acc.bank_name === "QRIS" && acc.qr_image_url ? (

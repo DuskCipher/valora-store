@@ -79,7 +79,7 @@ export const HeroCarousel: React.FC = () => {
 
         if (data && data.length > 0) {
           const carouselData = data
-            .filter((b) => b.type === "carousel")
+            .filter((b) => b.type === "carousel" && !b.is_hidden)
             .map((b) => ({
               badges: Array.isArray(b.badges) ? b.badges : [],
               bulletPoints: Array.isArray(b.bullet_points) ? b.bullet_points : [],
@@ -88,13 +88,15 @@ export const HeroCarousel: React.FC = () => {
               className: styles.slide1
             }));
 
-          const sideBannerData = data.find((b) => b.type === "side_banner");
+          const sideBannerData = data.find((b) => b.type === "side_banner" && !b.is_hidden);
 
           if (carouselData.length > 0) {
             setSlides(carouselData);
           }
           if (sideBannerData) {
             setSideBanner(sideBannerData);
+          } else {
+            setSideBanner(null);
           }
         }
       } catch (err) {

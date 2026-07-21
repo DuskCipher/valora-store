@@ -51,19 +51,27 @@ export default function PembelianPage() {
       if (productIds.length > 0) {
         const { data: latestProds } = await supabase
           .from("products")
-          .select("id, file_url, variations")
+          .select("id, file_url, allow_download_update")
           .in("id", productIds);
+          
+        const { data: latestVars } = await supabase
+          .from("product_variations")
+          .select("id, product_id, file_url")
+          .in("product_id", productIds);
           
         if (latestProds) {
           const links: Record<string, string> = {};
+          
           latestProds.forEach((p: any) => {
+             // allow_download_update check can be added if needed, but assuming sellers want to give latest if they updated file_url
              if (p.file_url) links[p.id] = p.file_url;
-             if (p.variations && Array.isArray(p.variations)) {
-               p.variations.forEach((v: any) => {
-                 if (v.file_url) links[`${p.id}_${v.id}`] = v.file_url;
-               });
-             }
           });
+
+          if (latestVars) {
+            latestVars.forEach((v: any) => {
+               if (v.file_url) links[`${v.product_id}_${v.id}`] = v.file_url;
+            });
+          }
           setLatestLinks(links);
         }
       }

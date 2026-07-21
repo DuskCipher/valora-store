@@ -16,7 +16,8 @@ import {
   CheckCircle,
   ChevronDown,
   ChevronRight,
-  X
+  X,
+  MessageSquare
 } from "lucide-react";
 import { ValoraLogo } from "./ValoraLogo";
 import { useTheme } from "@/context/ThemeContext";
@@ -28,6 +29,7 @@ const menuItems = [
   { id: "dashboard", icon: <LayoutDashboard size={18} />, label: "Dashboard", href: "/shop/dashboard" },
   { id: "tambah-produk", icon: <Plus size={18} />, label: "Tambah Produk", href: "/shop/tambah-produk" },
   { id: "produk-anda", icon: <Package size={18} />, label: "Produk Anda", href: "/shop/produk" },
+  { id: "chat-pembeli", icon: <MessageSquare size={18} />, label: "Chat Pembeli", href: "/shop/chat" },
   { 
     id: "program-produk", 
     icon: <Gift size={18} />, 

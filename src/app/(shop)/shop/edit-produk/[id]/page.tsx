@@ -26,6 +26,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [faqContent, setFaqContent] = useState("");
+  const [priceType, setPriceType] = useState<"paid" | "free">("paid");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(10);
   const [tags, setTags] = useState<string[]>([]);
@@ -67,11 +68,22 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           setDescription(data.description || "");
           setFaqContent(data.faq || "");
           setPrice(Number(data.price) || 0);
+          setPriceType(Number(data.price) === 0 ? "free" : "paid");
           setStock(data.stock || 0);
           setTags(data.tags || []);
           setInstantDelivery(data.is_instant || false);
           setProductType(data.product_type || "");
-          setCategoryId(data.category_id);
+          
+          if (data.category_id) {
+            const { data: catData } = await supabase.from('categories').select('name').eq('id', data.category_id).single();
+            if (catData) {
+              setCategoryId(catData.name);
+            } else {
+              setCategoryId(data.category_id);
+            }
+          } else {
+            setCategoryId(null);
+          }
           setDeliveryTime(data.delivery_time || "");
           setPreviewUrl(data.preview_url || "");
           setAdditionalInfo(data.additional_info_req || "");
@@ -450,14 +462,29 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             </div>
           )}
 
+          <div className={styles.formGroup} style={{ marginBottom: "20px" }}>
+            <label className={styles.formLabel}>Tipe Harga</label>
+            <div style={{ display: "flex", gap: "24px", marginTop: "8px" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "#64748b", cursor: "pointer" }}>
+                <input type="radio" name="priceType" value="paid" checked={priceType === "paid"} onChange={() => setPriceType("paid")} style={{ accentColor: "#10b981", width: "16px", height: "16px" }} />
+                Berbayar
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "#64748b", cursor: "pointer" }}>
+                <input type="radio" name="priceType" value="free" checked={priceType === "free"} onChange={() => { setPriceType("free"); setPrice(0); }} style={{ accentColor: "#10b981", width: "16px", height: "16px" }} />
+                Gratis
+              </label>
+            </div>
+          </div>
+
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Harga</label>
               <input 
                 type="number" 
                 className={styles.formInput} 
-                value={price}
+                value={priceType === "free" ? 0 : price}
                 onChange={(e) => setPrice(Number(e.target.value))}
+                disabled={priceType === "free"}
               />
             </div>
             <div className={styles.formGroup}>
@@ -526,12 +553,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   <input 
                     type="number" 
                     className={styles.formInput} 
-                    value={variation.price} 
+                    value={priceType === "free" ? 0 : variation.price} 
                     onChange={(e) => {
                       const newVars = [...variations];
                       newVars[index].price = Number(e.target.value);
                       setVariations(newVars);
                     }} 
+                    disabled={priceType === "free"}
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -715,15 +743,16 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               }
               
               // Handle category_id which must be a UUID
-              let finalCategoryId = categoryId;
-              if (categoryId && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(categoryId)) {
+              let finalCategoryId = categoryId === "Semua" ? null : categoryId;
+              if (finalCategoryId && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(finalCategoryId)) {
                 // Try to find the category by name
-                const { data: catData } = await supabase.from('categories').select('id').eq('name', categoryId).single();
+                const { data: catData, error: findCatError } = await supabase.from('categories').select('id').ilike('name', finalCategoryId).maybeSingle();
                 if (catData) {
                   finalCategoryId = catData.id;
                 } else {
                   // Try to insert if it doesn't exist
-                  const { data: newCat } = await supabase.from('categories').insert({ name: categoryId }).select().single();
+                  const { data: newCat, error: insertCatError } = await supabase.from('categories').insert({ name: finalCategoryId }).select().maybeSingle();
+                  if (insertCatError) console.error("Error inserting category:", insertCatError);
                   finalCategoryId = newCat ? newCat.id : null;
                 }
               }
@@ -735,7 +764,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   name: name,
                   description: description || "Deskripsi produk",
                   faq: faqContent,
-                  price: price,
+                  price: priceType === "free" ? 0 : price,
                   stock: stock,
                   is_active: status === "published",
                   status: status,
@@ -762,7 +791,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                 const variationsToInsert = variations.map((v, i) => ({
                   product_id: params.id,
                   name: v.name,
-                  price: v.price,
+                  price: priceType === "free" ? 0 : v.price,
                   stock: v.stock,
                   file_url: variationFileUrls[i] || null,
                 }));

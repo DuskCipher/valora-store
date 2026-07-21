@@ -24,7 +24,11 @@ export default function Home() {
           *,
           stores (
             name,
-            logo_url
+            logo_url,
+            is_verified
+          ),
+          categories (
+            name
           )
         `)
         .eq('is_active', true)
@@ -47,7 +51,8 @@ export default function Home() {
           seller: {
             name: item.stores?.name || "Unknown Store",
             avatar: item.stores?.logo_url || (item.stores?.name ? item.stores.name.substring(0, 2).toUpperCase() : "US"),
-            rating: 5.0
+            rating: 5.0,
+            is_verified: item.stores?.is_verified || false
           },
           badges: [
             ...(item.is_instant ? ["INSTANT"] : []),
@@ -57,34 +62,45 @@ export default function Home() {
           features: [],
           inStock: item.stock,
           lastUpdated: item.updated_at || item.created_at,
-          category: item.category_id || "Uncategorized",
+          category: item.categories?.name || item.category_id || "Uncategorized",
           demoUrl: item.preview_url || "",
           slug: item.slug
         }));
         
-        // Compute real sales from transactions to fix 0 sales bug
+        // Compute real sales and ratings from transactions
         try {
           const { data: txs } = await supabase
             .from("transactions")
-            .select("details")
-            .eq("type", "order")
-            .eq("status", "approved");
+            .select("type, status, details")
+            .in("type", ["order", "review"]);
             
           if (txs) {
             const salesMap: Record<string, number> = {};
+            const ratingsMap: Record<string, { total: number, count: number }> = {};
+            
             txs.forEach((t: any) => {
-              const items = t.details?.items || [];
-              items.forEach((item: any) => {
-                const pid = item.product?.id || item.id;
+              if (t.type === "order" && t.status === "approved") {
+                const items = t.details?.items || [];
+                items.forEach((item: any) => {
+                  const pid = item.product?.id || item.id;
+                  if (pid) {
+                    salesMap[pid] = (salesMap[pid] || 0) + (item.quantity || 1);
+                  }
+                });
+              } else if (t.type === "review") {
+                const pid = t.details?.product_id;
                 if (pid) {
-                  salesMap[pid] = (salesMap[pid] || 0) + (item.quantity || 1);
+                  if (!ratingsMap[pid]) ratingsMap[pid] = { total: 0, count: 0 };
+                  ratingsMap[pid].total += (t.details?.rating || 5);
+                  ratingsMap[pid].count += 1;
                 }
-              });
+              }
             });
             
             mappedProducts = mappedProducts.map(p => ({
               ...p,
-              sold: Math.max(p.sold, salesMap[p.id] || 0)
+              sold: Math.max(p.sold, salesMap[p.id] || 0),
+              rating: ratingsMap[p.id] ? Number((ratingsMap[p.id].total / ratingsMap[p.id].count).toFixed(1)) : p.rating
             }));
           }
         } catch (e) {

@@ -623,15 +623,16 @@ export default function TambahProdukPage() {
               }
               
               // Handle category_id which must be a UUID
-              let finalCategoryId = categoryId;
-              if (categoryId && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(categoryId)) {
+              let finalCategoryId = categoryId === "Semua" ? null : categoryId;
+              if (finalCategoryId && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(finalCategoryId)) {
                 // Try to find the category by name
-                const { data: catData } = await supabase.from('categories').select('id').eq('name', categoryId).single();
+                const { data: catData, error: findCatError } = await supabase.from('categories').select('id').ilike('name', finalCategoryId).maybeSingle();
                 if (catData) {
                   finalCategoryId = catData.id;
                 } else {
                   // Try to insert if it doesn't exist
-                  const { data: newCat } = await supabase.from('categories').insert({ name: categoryId }).select().single();
+                  const { data: newCat, error: insertCatError } = await supabase.from('categories').insert({ name: finalCategoryId }).select().maybeSingle();
+                  if (insertCatError) console.error("Error inserting category:", insertCatError);
                   finalCategoryId = newCat ? newCat.id : null;
                 }
               }

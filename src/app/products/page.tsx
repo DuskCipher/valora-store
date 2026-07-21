@@ -55,7 +55,11 @@ export default function ProductsPage() {
           *,
           stores (
             name,
-            logo_url
+            logo_url,
+            is_verified
+          ),
+          categories (
+            name
           )
         `)
         .eq('is_active', true);
@@ -77,7 +81,8 @@ export default function ProductsPage() {
           seller: {
             name: item.stores?.name || "Unknown Store",
             avatar: item.stores?.logo_url || (item.stores?.name ? item.stores.name.substring(0, 2).toUpperCase() : "US"),
-            rating: 5.0
+            rating: 5.0,
+            is_verified: item.stores?.is_verified || false
           },
           badges: [
             ...(item.is_instant ? ["INSTANT"] : []),
@@ -87,34 +92,45 @@ export default function ProductsPage() {
           features: [],
           inStock: item.stock,
           lastUpdated: item.updated_at || item.created_at,
-          category: item.category_id || "Uncategorized",
+          category: item.categories?.name || item.category_id || "Uncategorized",
           demoUrl: item.preview_url || "",
           slug: item.slug
         }));
         
-        // Compute real sales from transactions to fix 0 sales bug
+        // Compute real sales and ratings from transactions
         try {
           const { data: txs } = await supabase
             .from("transactions")
-            .select("details")
-            .eq("type", "order")
-            .eq("status", "approved");
+            .select("type, status, details")
+            .in("type", ["order", "review"]);
             
           if (txs) {
             const salesMap: Record<string, number> = {};
+            const ratingsMap: Record<string, { total: number, count: number }> = {};
+            
             txs.forEach((t: any) => {
-              const items = t.details?.items || [];
-              items.forEach((item: any) => {
-                const pid = item.product?.id || item.id;
+              if (t.type === "order" && t.status === "approved") {
+                const items = t.details?.items || [];
+                items.forEach((item: any) => {
+                  const pid = item.product?.id || item.id;
+                  if (pid) {
+                    salesMap[pid] = (salesMap[pid] || 0) + (item.quantity || 1);
+                  }
+                });
+              } else if (t.type === "review") {
+                const pid = t.details?.product_id;
                 if (pid) {
-                  salesMap[pid] = (salesMap[pid] || 0) + (item.quantity || 1);
+                  if (!ratingsMap[pid]) ratingsMap[pid] = { total: 0, count: 0 };
+                  ratingsMap[pid].total += (t.details?.rating || 5);
+                  ratingsMap[pid].count += 1;
                 }
-              });
+              }
             });
             
             mappedProducts = mappedProducts.map(p => ({
               ...p,
-              sold: Math.max(p.sold, salesMap[p.id] || 0)
+              sold: Math.max(p.sold, salesMap[p.id] || 0),
+              rating: ratingsMap[p.id] ? Number((ratingsMap[p.id].total / ratingsMap[p.id].count).toFixed(1)) : p.rating
             }));
           }
         } catch (e) {
@@ -211,13 +227,13 @@ export default function ProductsPage() {
           {/* Sidebar */}
           <aside className={`${styles.sidebar} ${isMobileSidebarOpen ? styles.mobileOpen : ""}`}>
             <div className={styles.sidebarHeader}>
-              <SlidersHorizontal size={20} style={{ color: '#64748b' }} />
+              <SlidersHorizontal size={20} style={{ color: 'var(--text-muted)' }} />
             </div>
             
             <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--text-main)', marginBottom: '16px' }}>Filters</div>
 
             {/* Search */}
-            <div className={styles.filterGroup} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
+            <div className={styles.filterGroup}>
               <div className={styles.searchContainer}>
                 <Search size={16} className={styles.searchIcon} />
                 <input 
@@ -226,13 +242,13 @@ export default function ProductsPage() {
                   className={styles.searchInput}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid #cbd5e1', borderRadius: 0, paddingLeft: '32px' }}
+                  style={{ border: '1px solid var(--border-color)', borderRadius: '6px', paddingLeft: '36px', backgroundColor: 'var(--bg-input)' }}
                 />
               </div>
             </div>
 
             {/* Category */}
-            <div className={styles.filterGroup} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
+            <div className={styles.filterGroup}>
               <div 
                 className={styles.filterTitle} 
                 onClick={() => toggleFilter("category")}
@@ -253,7 +269,7 @@ export default function ProductsPage() {
             </div>
 
             {/* Rating */}
-            <div className={styles.filterGroup} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
+            <div className={styles.filterGroup}>
               <div 
                 className={styles.filterTitle} 
                 onClick={() => toggleFilter("rating")}
@@ -292,7 +308,7 @@ export default function ProductsPage() {
             </div>
 
             {/* Delivery */}
-            <div className={styles.filterGroup} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
+            <div className={styles.filterGroup}>
               <div 
                 className={styles.filterTitle} 
                 onClick={() => toggleFilter("delivery")}
@@ -319,7 +335,7 @@ export default function ProductsPage() {
             </div>
 
             {/* Other */}
-            <div className={styles.filterGroup} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
+            <div className={styles.filterGroup}>
               <div 
                 className={styles.filterTitle} 
                 onClick={() => toggleFilter("other")}
@@ -328,7 +344,7 @@ export default function ProductsPage() {
                 Other {openFilters.other ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
               {openFilters.other && (
-                <div style={{ fontSize: '13px', color: '#64748b' }}>No other filters available.</div>
+                <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>No other filters available.</div>
               )}
             </div>
 
@@ -342,7 +358,7 @@ export default function ProductsPage() {
                 Price {openFilters.price ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
               {openFilters.price && (
-                <div style={{ fontSize: '13px', color: '#64748b' }}>Price range filter coming soon.</div>
+                <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Price range filter coming soon.</div>
               )}
             </div>
           </aside>
@@ -377,7 +393,7 @@ export default function ProductsPage() {
                 ))}
               </div>
             ) : (
-              <div style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+              <div style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)", backgroundColor: "var(--bg-card)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
                 Tidak ada produk yang sesuai dengan kriteria filter Anda.
               </div>
             )}

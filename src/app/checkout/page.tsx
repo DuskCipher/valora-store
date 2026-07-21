@@ -221,7 +221,7 @@ export default function CheckoutPage() {
     <div className={styles.checkoutPage}>
       <Header />
       <div className={styles.container}>
-        <div style={{ backgroundColor: "#FEF2F2", color: "#991B1B", padding: "16px", borderRadius: "8px", marginBottom: "24px", border: "1px solid #F87171" }}>
+        <div style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", color: "var(--danger)", padding: "16px", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--danger)" }}>
           <strong>⚠️ Peringatan:</strong> API Gateway sedang dalam masa maintenance. Untuk sementara, semua transaksi akan diproses secara manual oleh Admin Utama.
         </div>
 
@@ -441,7 +441,13 @@ export default function CheckoutPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Bank / Metode</span>
-                    <span style={{ fontWeight: "700", fontSize: 15, color: "var(--text-main)" }}>{accountInfo.bank_name}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {selectedMethod?.logo && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={selectedMethod.logo} alt={accountInfo.bank_name} style={{ height: 16, objectFit: "contain" }} />
+                      )}
+                      <span style={{ fontWeight: "700", fontSize: 15, color: "var(--text-main)" }}>{accountInfo.bank_name}</span>
+                    </div>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Nomor Rekening</span>

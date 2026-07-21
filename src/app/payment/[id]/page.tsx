@@ -31,6 +31,20 @@ interface PaymentAccount {
   qr_image_url: string | null;
 }
 
+const PAYMENT_LOGOS: Record<string, string> = {
+  "BCA": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/200px-Bank_Central_Asia.svg.png",
+  "BRI": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/200px-BANK_BRI_logo.svg.png",
+  "BNI": "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/200px-BNI_logo.svg.png",
+  "Mandiri": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/200px-Bank_Mandiri_logo_2016.svg.png",
+  "BSI": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/BSI_logo.svg/200px-BSI_logo.svg.png",
+  "Bank Jago": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Bank_Jago_logo.svg/200px-Bank_Jago_logo.svg.png",
+  "SeaBank": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Seabank_logo.png/200px-Seabank_logo.png",
+  "QRIS": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/200px-Logo_QRIS.svg.png",
+  "DANA": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Dana_logo.svg/200px-Dana_logo.svg.png",
+  "GoPay": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/200px-Gopay_logo.svg.png",
+  "OVO": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_ovo_purple.svg/200px-Logo_ovo_purple.svg.png"
+};
+
 export default function PaymentDetailPage({ params }: { params: { id: string } }) {
   const { supabaseUser } = useAuth();
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -174,7 +188,7 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
         {/* Status Bar */}
         <div className={`${styles.card} ${styles.statusBar}`}>
           <div className={styles.statusLeft}>
-            <span style={{ fontSize: 14, color: "var(--text-muted)", fontWeight: "600" }}>Status Pembayaran :</span>
+            <span style={{ fontSize: 14, color: "var(--text-main)", fontWeight: "600" }}>Status Pembayaran :</span>
             <span style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 20, background: statusInfo.bg, color: statusInfo.color, fontWeight: "700", fontSize: 13 }}>
               {statusInfo.icon}
               {statusInfo.label.toUpperCase()}
@@ -186,7 +200,12 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
             </button>
           )}
           {transaction.status === "approved" && (
-            <span style={{ color: "#065f46", fontWeight: "bold", fontSize: 14 }}>✓ Pembayaran Dikonfirmasi!</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ color: "var(--primary)", fontWeight: "bold", fontSize: 14 }}>✓ Pembayaran Dikonfirmasi!</span>
+              <Link href="/pembelian" style={{ padding: "8px 16px", background: "var(--primary)", color: "white", borderRadius: 8, fontWeight: "600", fontSize: 13, textDecoration: "none" }}>
+                Pembelian Saya
+              </Link>
+            </div>
           )}
         </div>
 
@@ -203,7 +222,13 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
             </div>
             <div>
               <p style={{ fontSize: 11, fontWeight: "700", color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 4 }}>Metode Pembayaran</p>
-              <p style={{ fontSize: 14, fontWeight: "700", color: "var(--text-main)" }}>{transaction.payment_method} - Manual</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {PAYMENT_LOGOS[transaction.payment_method] && (
+                   // eslint-disable-next-line @next/next/no-img-element
+                   <img src={PAYMENT_LOGOS[transaction.payment_method]} alt={transaction.payment_method} style={{ height: 16, objectFit: "contain" }} />
+                )}
+                <p style={{ fontSize: 14, fontWeight: "700", color: "var(--text-main)" }}>{transaction.payment_method} - Manual</p>
+              </div>
             </div>
           </div>
 
@@ -282,7 +307,13 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                     <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Bank</span>
-                    <span style={{ fontWeight: "700", fontSize: 15 }}>{paymentAccount.bank_name} - Manual</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {PAYMENT_LOGOS[paymentAccount.bank_name] && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={PAYMENT_LOGOS[paymentAccount.bank_name]} alt={paymentAccount.bank_name} style={{ height: 20, objectFit: "contain" }} />
+                      )}
+                      <span style={{ fontWeight: "700", fontSize: 15 }}>{paymentAccount.bank_name} - Manual</span>
+                    </div>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                     <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Nomor Rekening</span>

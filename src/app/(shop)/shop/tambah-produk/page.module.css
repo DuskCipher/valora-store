@@ -59,7 +59,7 @@
   gap: 12px;
   cursor: pointer;
   transition: border-color 0.2s;
-  background-color: var(--bg-input);
+  background-color: var(--bg-hover);
 }
 
 .uploadArea:hover {
@@ -70,7 +70,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: #e2e8f0;
+  background-color: var(--bg-card);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,8 +168,8 @@
   align-items: center;
   gap: 2px;
   padding: 8px 12px;
-  border-bottom: 1px solid #e2e8f0;
-  background-color: var(--bg-input);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-hover);
   flex-wrap: wrap;
 }
 
@@ -184,12 +184,12 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-main);
   transition: background-color 0.15s;
 }
 
 .toolbarBtn:hover {
-  background-color: #e2e8f0;
+  background-color: var(--bg-hover);
 }
 
 .toolbarSelect {
@@ -197,7 +197,7 @@
   border: none;
   background: none;
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--text-main);
   cursor: pointer;
   outline: none;
 }
@@ -205,7 +205,7 @@
 .toolbarDivider {
   width: 1px;
   height: 20px;
-  background-color: #e2e8f0;
+  background-color: var(--border-color);
   margin: 0 6px;
 }
 
@@ -327,7 +327,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: #e2e8f0;
+  background-color: var(--bg-hover);
   color: var(--text-muted);
   font-size: 11px;
   font-weight: 700;
@@ -350,7 +350,7 @@
   border-radius: 4px;
   font-weight: 600;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-main);
   cursor: pointer;
   transition: all 0.2s;
 }

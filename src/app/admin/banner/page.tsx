@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, Save, Upload, Edit, X } from "lucide-react";
+import { Plus, Trash2, Save, Upload, Edit, X, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 interface Badge {
@@ -23,6 +23,7 @@ interface Banner {
   badge_text?: string;
   button_text?: string;
   order_index?: number;
+  is_hidden?: boolean;
 }
 
 export default function AdminBannerPage() {
@@ -60,6 +61,10 @@ export default function AdminBannerPage() {
   const [sideLinkUrl, setSideLinkUrl] = useState("#");
   const [isSavingSide, setIsSavingSide] = useState(false);
 
+  // Visibility states
+  const [carouselHidden, setCarouselHidden] = useState(false);
+  const [sideBannerHidden, setSideBannerHidden] = useState(false);
+
   useEffect(() => {
     const isAuth = localStorage.getItem("zaystore_admin_auth");
     if (isAuth !== "true") {
@@ -83,6 +88,10 @@ export default function AdminBannerPage() {
       } else if (data) {
         setBanners(data);
 
+        // Load carousel visibility from localStorage
+        const carouselHiddenStored = localStorage.getItem("zaystore_carousel_hidden");
+        setCarouselHidden(carouselHiddenStored === "true");
+
         // Load side banner if exists
         const side = data.find((b) => b.type === "side_banner");
         if (side) {
@@ -92,6 +101,7 @@ export default function AdminBannerPage() {
           setSideDesc(side.description || "");
           setSideBtnText(side.button_text || "Beli Sekarang");
           setSideLinkUrl(side.link_url || "#");
+          setSideBannerHidden(side.is_hidden || false);
         }
       }
     } catch (err: any) {
@@ -223,7 +233,8 @@ export default function AdminBannerPage() {
         title: sideTitle,
         description: sideDesc,
         button_text: sideBtnText,
-        link_url: sideLinkUrl
+        link_url: sideLinkUrl,
+        is_hidden: sideBannerHidden
       };
 
       if (sideBannerId) {
@@ -248,6 +259,50 @@ export default function AdminBannerPage() {
       alert("Gagal menyimpan: " + err.message);
     } finally {
       setIsSavingSide(false);
+    }
+  };
+
+  // Toggle carousel visibility
+  const handleToggleCarousel = async () => {
+    const newState = !carouselHidden;
+    setCarouselHidden(newState);
+    localStorage.setItem("zaystore_carousel_hidden", String(newState));
+
+    // Update all carousel banners' is_hidden field
+    try {
+      const { error } = await supabase
+        .from("banners")
+        .update({ is_hidden: newState })
+        .eq("type", "carousel");
+
+      if (error) throw error;
+      alert(newState ? "Carousel banner disembunyikan!" : "Carousel banner ditampilkan!");
+      fetchBanners();
+    } catch (err: any) {
+      console.error(err);
+      alert("Gagal mengubah visibilitas: " + err.message);
+    }
+  };
+
+  // Toggle side banner visibility
+  const handleToggleSideBanner = async () => {
+    const newState = !sideBannerHidden;
+    setSideBannerHidden(newState);
+
+    try {
+      if (sideBannerId) {
+        const { error } = await supabase
+          .from("banners")
+          .update({ is_hidden: newState })
+          .eq("id", sideBannerId);
+
+        if (error) throw error;
+      }
+      alert(newState ? "Promo Banner Samping disembunyikan!" : "Promo Banner Samping ditampilkan!");
+      fetchBanners();
+    } catch (err: any) {
+      console.error(err);
+      alert("Gagal mengubah visibilitas: " + err.message);
     }
   };
 
@@ -321,26 +376,48 @@ export default function AdminBannerPage() {
           <div style={{ background: "var(--bg-card)", padding: "24px", borderRadius: "12px", border: "1px solid var(--border-color)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h2 style={{ fontSize: "18px", fontWeight: "bold" }}>Daftar Slide</h2>
-              {!isEditingCarousel && (
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                {/* Hide/Show Toggle */}
                 <button
-                  onClick={() => setIsEditingCarousel(true)}
+                  onClick={handleToggleCarousel}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
                     padding: "8px 16px",
-                    background: "var(--primary)",
+                    background: carouselHidden ? "#ef4444" : "#22c55e",
                     color: "white",
                     border: "none",
                     borderRadius: "6px",
                     fontWeight: "bold",
                     cursor: "pointer",
-                    fontSize: "14px"
+                    fontSize: "13px"
                   }}
                 >
-                  <Plus size={16} /> Tambah Slide
+                  {carouselHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {carouselHidden ? "Disembunyikan" : "Ditampilkan"}
                 </button>
-              )}
+                {!isEditingCarousel && (
+                  <button
+                    onClick={() => setIsEditingCarousel(true)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      padding: "8px 16px",
+                      background: "var(--primary)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      fontSize: "14px"
+                    }}
+                  >
+                    <Plus size={16} /> Tambah Slide
+                  </button>
+                )}
+              </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -430,6 +507,9 @@ export default function AdminBannerPage() {
                     onChange={(e) => setCarouselImageFile(e.target.files?.[0] || null)}
                     style={{ padding: "8px 0" }}
                   />
+                  <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+                    *Rekomendasi ukuran Desktop: 1200x500 px. Ukuran Mobile: 800x400 px (Rasio 2:1).
+                  </span>
                   {!carouselImageFile && (
                     <input
                       type="text"
@@ -567,7 +647,28 @@ export default function AdminBannerPage() {
       {/* SIDE BANNER SECTION */}
       {!isLoading && activeTab === "side_banner" && (
         <div style={{ maxWidth: "600px", background: "var(--bg-card)", padding: "24px", borderRadius: "12px", border: "1px solid var(--border-color)" }}>
-          <h2 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "20px" }}>Edit Banner Promo Samping</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: "bold" }}>Edit Banner Promo Samping</h2>
+            <button
+              onClick={handleToggleSideBanner}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 16px",
+                background: sideBannerHidden ? "#ef4444" : "#22c55e",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                fontSize: "13px"
+              }}
+            >
+              {sideBannerHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+              {sideBannerHidden ? "Disembunyikan" : "Ditampilkan"}
+            </button>
+          </div>
           
           <form onSubmit={handleSaveSideBanner} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>

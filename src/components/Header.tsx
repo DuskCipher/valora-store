@@ -17,7 +17,7 @@ import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
   const { searchTerm, setSearchTerm, totalCartItems } = useStore();
-  const { isLoggedIn, user, login, logout, hasStore } = useAuth();
+  const { isLoggedIn, user, supabaseUser, login, logout, hasStore } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [isCartOpen, setIsCartOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
@@ -27,8 +27,99 @@ export const Header: React.FC = () => {
 
   const [isMobileSearchOpen, setIsMobileSearchOpen] = React.useState(false);
 
+  const [unreadMsgCount, setUnreadMsgCount] = React.useState(0);
+  const [unreadNotifCount, setUnreadNotifCount] = React.useState(0);
+
   const pathname = usePathname();
   const router = useRouter();
+
+  // Load supabase client dynamically or import
+  const { supabase } = require("@/lib/supabase");
+
+  React.useEffect(() => {
+    if (!isLoggedIn || !supabaseUser) {
+      setUnreadNotifCount(0);
+      setUnreadMsgCount(0);
+      return;
+    }
+
+    const fetchCounts = async () => {
+      try {
+        // Fetch unread notifications
+        const { count: notifCount } = await supabase
+          .from('notifications')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', supabaseUser.id)
+          .eq('is_read', false);
+
+        setUnreadNotifCount(notifCount || 0);
+
+        // Fetch unread messages
+        // First find rooms where the user is a buyer
+        const { data: rooms } = await supabase
+          .from('chat_rooms')
+          .select('id')
+          .eq('buyer_id', supabaseUser.id);
+          
+        const roomIds = rooms?.map((r: any) => r.id) || [];
+        
+        // Also find rooms where the user is the owner of the store
+        const { data: myStore } = await supabase
+          .from('stores')
+          .select('id')
+          .eq('owner_id', supabaseUser.id)
+          .maybeSingle();
+
+        if (myStore) {
+          const { data: storeRooms } = await supabase
+            .from('chat_rooms')
+            .select('id')
+            .eq('store_id', myStore.id);
+            
+          if (storeRooms) {
+            storeRooms.forEach((r: any) => {
+              if (!roomIds.includes(r.id)) roomIds.push(r.id);
+            });
+          }
+        }
+
+        if (roomIds.length > 0) {
+          const { count: msgCount } = await supabase
+            .from('chat_messages')
+            .select('*', { count: 'exact', head: true })
+            .in('room_id', roomIds)
+            .neq('sender_id', supabaseUser.id)
+            .eq('is_read', false);
+
+          setUnreadMsgCount(msgCount || 0);
+        } else {
+          setUnreadMsgCount(0);
+        }
+      } catch (err) {
+        console.error("Error fetching counts:", err);
+      }
+    };
+
+    fetchCounts();
+
+    // Subscribe to new messages & notifications
+    const channelName = `header-unread-counts-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const channel = supabase.channel(channelName);
+    
+    channel.on('postgres_changes', { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${supabaseUser.id}` }, () => {
+      fetchCounts();
+    });
+    
+    channel.on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, () => {
+      fetchCounts();
+    });
+    
+    channel.subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isLoggedIn, supabaseUser]);
   
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -112,6 +203,9 @@ export const Header: React.FC = () => {
                 onClick={() => setIsNotifOpen(!isNotifOpen)}
               >
                 <Bell size={20} />
+                {unreadNotifCount > 0 && (
+                  <span className={styles.badge}>{unreadNotifCount}</span>
+                )}
               </button>
               <NotificationDropdown 
                 isOpen={isNotifOpen} 
@@ -120,10 +214,18 @@ export const Header: React.FC = () => {
             </div>
           )}
 
-          <button className={styles.iconBtn} aria-label="Messages">
-            <MessageSquare size={20} />
-            <span className={`${styles.badge} ${styles.badgeDanger}`}>3</span>
-          </button>
+          {isLoggedIn ? (
+            <Link href="/chat" className={`${styles.iconBtn} ${styles.desktopOnly}`} aria-label="Messages" style={{ textDecoration: 'none' }}>
+              <MessageSquare size={20} />
+              {unreadMsgCount > 0 && (
+                <span className={`${styles.badge} ${styles.badgeDanger}`}>{unreadMsgCount}</span>
+              )}
+            </Link>
+          ) : (
+            <button className={`${styles.iconBtn} ${styles.desktopOnly}`} aria-label="Messages" onClick={() => setIsAuthModalOpen(true)}>
+              <MessageSquare size={20} />
+            </button>
+          )}
 
 
           <button className={styles.iconBtn} aria-label="Cart" onClick={() => setIsCartOpen(true)}>
@@ -199,12 +301,17 @@ export const Header: React.FC = () => {
                   style={{ width: "32px", height: "32px" }}
                 >
                   <Bell size={18} />
+                  {unreadNotifCount > 0 && (
+                    <span className={styles.badge} style={{ top: '-2px', right: '-2px', fontSize: '9px', minWidth: '14px', height: '14px', lineHeight: '14px' }}>{unreadNotifCount}</span>
+                  )}
                 </button>
                 <NotificationDropdown 
                   isOpen={isNotifOpen} 
                   onClose={() => setIsNotifOpen(false)} 
                 />
               </div>
+
+              {/* Message icon removed from mobile header as requested */}
 
               <Link href={hasStore ? "/shop/dashboard" : "/shop/pengaturan/informasi"} className={styles.iconBtn} style={{ width: "32px", height: "32px" }}>
                 <Store size={18} />

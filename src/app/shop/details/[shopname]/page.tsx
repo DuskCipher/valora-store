@@ -44,8 +44,8 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [ratingFilter, setRatingFilter] = useState("All");
   const [openFilters, setOpenFilters] = useState({
-    category: true,
-    rating: true
+    category: false,
+    rating: false
   });
 
   const toggleFilter = (key: keyof typeof openFilters) => {
@@ -163,13 +163,14 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
               const userIds = Array.from(new Set(reviewsForStore.map((r: any) => r.user_id)));
               let profilesMap: any = {};
               if (userIds.length > 0) {
-                 const { data: profilesData } = await supabase.from("profiles").select("id, full_name").in("id", userIds);
+                 const { data: profilesData } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", userIds);
                  profilesData?.forEach((p: any) => { profilesMap[p.id] = p; });
               }
 
               const enrichedReviews = reviewsForStore.map((r: any) => ({
                 ...r,
                 reviewerName: r.details?.reviewer_name || profilesMap[r.user_id]?.full_name || "Pengguna",
+                reviewerAvatar: profilesMap[r.user_id]?.avatar_url,
                 productName: mappedProducts.find((p: any) => p.id === r.details?.product_id)?.name || "Produk"
               }));
 
@@ -230,8 +231,8 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
 
   // Calculate totals
   const totalSales = products.reduce((acc, curr) => acc + (curr.sold || 0), 0);
-  const totalRating = products.reduce((acc, curr) => acc + (curr.rating || 0), 0);
-  const avgRating = products.length > 0 ? (totalRating / products.length).toFixed(2) : "0.00";
+  const totalRating = storeReviews.reduce((acc, curr) => acc + (curr.details?.rating || 5), 0);
+  const avgRating = storeReviews.length > 0 ? (totalRating / storeReviews.length).toFixed(2) : "0.00";
 
   let filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -269,16 +270,22 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
                   <span className={styles.logoPlaceholder}>{store.name.charAt(0).toUpperCase()}</span>
                 )}
               </div>
-              <h1 className={styles.shopName}>{store.name}</h1>
+              <h1 className={styles.shopName} style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                {store.name}
+                {store.is_verified && <CheckCircle2 size={20} color="#3b82f6" style={{ flexShrink: 0 }} />}
+              </h1>
               <div className={styles.onlineStatus}>Aktif</div>
               
               <div className={styles.statsRow}>
                 <div className={styles.statItem}>
-                  <Star size={14} fill="#94a3b8" color="#94a3b8" />
-                  <Star size={14} fill="#94a3b8" color="#94a3b8" />
-                  <Star size={14} fill="#94a3b8" color="#94a3b8" />
-                  <Star size={14} fill="#94a3b8" color="#94a3b8" />
-                  <Star size={14} fill="#94a3b8" color="#94a3b8" />
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      size={14} 
+                      fill={i < Math.round(Number(avgRating)) ? "#f59e0b" : "#94a3b8"} 
+                      color={i < Math.round(Number(avgRating)) ? "#f59e0b" : "#94a3b8"} 
+                    />
+                  ))}
                   <span style={{ fontWeight: 600, marginLeft: "4px" }}>{avgRating}</span>
                   <span>({storeReviews.length} Ulasan)</span>
                 </div>
@@ -404,67 +411,71 @@ export default function StoreDetailsPage({ params }: { params: { shopname: strin
                     </div>
                   )
                 ) : activeTab === "Tentang" ? (
-                  <div style={{ gridColumn: '1 / -1', padding: '24px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                    <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: '#1e293b' }}>Profil Toko</h3>
-                    <p style={{ color: '#64748b', marginBottom: '24px', lineHeight: 1.6 }}>
+                  <div style={{ gridColumn: '1 / -1', padding: '24px', backgroundColor: 'var(--bg-card)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: 'var(--text-main)' }}>Profil Toko</h3>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '24px', lineHeight: 1.6 }}>
                       {store.description || `${store.name} menciptakan aplikasi yang berkualitas sesuai kebutuhan.`}
                     </p>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--bg-input)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <span style={{ fontSize: '18px' }}>📍</span>
                         </div>
                         <div>
-                          <div style={{ fontWeight: 600, color: '#1e293b' }}>Alamat</div>
-                          <div style={{ color: '#64748b', fontSize: '14px' }}>
+                          <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>Alamat</div>
+                          <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
                             {[store.city, store.province, store.address, store.postal_code].filter(Boolean).join(', ') || "Belum mengatur alamat"}
                           </div>
                         </div>
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginTop: '16px' }}>
-                        <div style={{ padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                        <div style={{ padding: '16px', backgroundColor: 'var(--bg-input)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
                           <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--primary)' }}>{totalSales}</div>
-                          <div style={{ fontSize: '14px', color: '#64748b' }}>Total Sales</div>
+                          <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Total Sales</div>
                         </div>
-                        <div style={{ padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                        <div style={{ padding: '16px', backgroundColor: 'var(--bg-input)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
                           <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--primary)' }}>{products.length}</div>
-                          <div style={{ fontSize: '14px', color: '#64748b' }}>Total Products</div>
+                          <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Total Products</div>
                         </div>
-                        <div style={{ padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                        <div style={{ padding: '16px', backgroundColor: 'var(--bg-input)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
                           <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--primary)' }}>{store.followers_count || 0}</div>
-                          <div style={{ fontSize: '14px', color: '#64748b' }}>Followers</div>
+                          <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Followers</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 ) : activeTab === "Ulasan" ? (
-                  <div style={{ gridColumn: '1 / -1', padding: '24px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                    <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', color: '#1e293b' }}>Ulasan Toko ({storeReviews.length})</h3>
+                  <div style={{ gridColumn: '1 / -1', padding: '24px', backgroundColor: 'var(--bg-card)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', color: 'var(--text-main)' }}>Ulasan Toko ({storeReviews.length})</h3>
                     {storeReviews.length > 0 ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         {storeReviews.map((review, idx) => (
-                          <div key={idx} style={{ paddingBottom: '20px', borderBottom: idx !== storeReviews.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                          <div key={idx} style={{ paddingBottom: '20px', borderBottom: idx !== storeReviews.length - 1 ? '1px solid var(--border-color)' : 'none' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#64748b' }}>
-                                {review.reviewerName.charAt(0).toUpperCase()}
+                              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--bg-input)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'var(--text-muted)', overflow: 'hidden' }}>
+                                {review.reviewerAvatar ? (
+                                  <img src={review.reviewerAvatar} alt={review.reviewerName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                ) : (
+                                  review.reviewerName.charAt(0).toUpperCase()
+                                )}
                               </div>
                               <div>
-                                <div style={{ fontWeight: 600, color: '#1e293b' }}>{review.reviewerName}</div>
-                                <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                                <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{review.reviewerName}</div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                                   Untuk produk: <span style={{ color: 'var(--primary)' }}>{review.productName}</span>
                                 </div>
                               </div>
                               <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '4px', color: '#f59e0b' }}>
                                 <Star size={16} fill="#f59e0b" />
-                                <span style={{ fontWeight: 600, color: '#1e293b' }}>{review.details?.rating || 5}</span>
+                                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{review.details?.rating || 5}</span>
                               </div>
                             </div>
-                            <p style={{ color: '#475569', fontSize: '14px', lineHeight: 1.5, marginTop: '8px' }}>
+                            <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: 1.5, marginTop: '8px' }}>
                               {review.details?.comment || "Tidak ada komentar"}
                             </p>
-                            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '8px' }}>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>
                               {new Date(review.created_at).toLocaleDateString('id-ID')}
                             </div>
                           </div>

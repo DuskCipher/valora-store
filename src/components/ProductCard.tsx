@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Search, ExternalLink, Star } from "lucide-react";
+import { Search, ExternalLink, Star, CheckCircle2 } from "lucide-react";
 import { Product } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
 import styles from "./ProductCard.module.css";
@@ -104,8 +104,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 product.seller.avatar
               )}
             </Link>
-            <Link href={`/shop/details/${encodeURIComponent(product.seller.name)}`} className={styles.sellerName} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link href={`/shop/details/${encodeURIComponent(product.seller.name)}`} className={styles.sellerName} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: '4px' }}>
               {product.seller.name}
+              {product.seller.is_verified && <CheckCircle2 size={12} color="#3b82f6" />}
             </Link>
           </div>
         </div>
@@ -117,7 +118,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className={styles.rating}>
             <div className={styles.stars}>{renderStars(product.rating || 5.0)}</div>
           </div>
-          <span className={styles.salesCount}>{product.sold} sold</span>
+          <span className={styles.salesCount}>{product.sold + (product.downloads || 0)} Terjual</span>
         </div>
         
         <div className={styles.priceContainer}>

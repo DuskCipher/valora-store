@@ -74,9 +74,22 @@ export function TagInput({ tags, onChange, placeholder = "Tambahkan tag..." }: T
             type="text"
             className={styles.input}
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val.endsWith(',')) {
+                handleAddTag(val.slice(0, -1));
+              } else {
+                setInputValue(val);
+              }
+            }}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              if (inputValue.trim()) {
+                // optionally we could add it, but it might interfere with clicking the dropdown.
+                // handleAddTag(inputValue);
+              }
+            }}
             placeholder={tags.length === 0 ? placeholder : ''}
           />
         </div>

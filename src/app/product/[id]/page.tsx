@@ -52,6 +52,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const [activeMediaIdx, setActiveMediaIdx] = useState(0);
   const [selectedVariation, setSelectedVariation] = useState<Variation | null>(null);
   const [isProcessingFree, setIsProcessingFree] = useState(false);
+  const [isStartingChat, setIsStartingChat] = useState(false);
   
   // Reviews state
   const [reviews, setReviews] = useState<any[]>([]);
@@ -67,6 +68,9 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           stores (
             name,
             logo_url
+          ),
+          categories (
+            name
           ),
           product_variations (
             id, name, price, discount_price, discount_percentage
@@ -118,6 +122,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
         const mapped: Product = {
           id: data.id,
+          storeId: data.store_id,
           name: data.name,
           description: data.description || "",
           price: (data.discount_price && Number(data.discount_price) < Number(data.price)) ? Number(data.discount_price) : Number(data.price),
@@ -140,7 +145,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           features: [],
           inStock: data.stock,
           lastUpdated: data.updated_at || data.created_at,
-          category: data.category_id || "Uncategorized",
+          category: data.categories?.name || data.category_id || "Uncategorized",
           demoUrl: data.preview_url || "",
           downloadUrl: data.file_url || "",
           variations: data.product_variations || []
@@ -343,6 +348,82 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     }
   };
 
+  const handleChatSeller = async () => {
+    if (!isLoggedIn || !supabaseUser) {
+      alert("Silakan login terlebih dahulu untuk mengirim pesan.");
+      router.push("/login");
+      return;
+    }
+
+    if (!product?.storeId) {
+      alert("Toko tidak valid atau tidak ditemukan.");
+      return;
+    }
+
+    try {
+      const { data: myStore } = await supabase
+        .from('stores')
+        .select('id')
+        .eq('owner_id', supabaseUser.id)
+        .eq('id', product.storeId)
+        .maybeSingle();
+
+      if (myStore) {
+        alert("Anda tidak bisa memulai chat dengan toko Anda sendiri.");
+        return;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    setIsStartingChat(true);
+    try {
+      const { data: existingRoom } = await supabase
+        .from('chat_rooms')
+        .select('id')
+        .eq('buyer_id', supabaseUser.id)
+        .eq('store_id', product.storeId)
+        .maybeSingle();
+
+      if (existingRoom) {
+        router.push(`/chat?room=${existingRoom.id}`);
+        return;
+      }
+
+      const { data: newRoom, error: insertError } = await supabase
+        .from('chat_rooms')
+        .insert({
+          buyer_id: supabaseUser.id,
+          store_id: product.storeId
+        })
+        .select('id')
+        .maybeSingle();
+
+      if (insertError) {
+        if (insertError.message?.includes("relation") && insertError.message?.includes("does not exist")) {
+          alert("Gagal memulai chat. Harap jalankan file 'supabase_schema.sql' di SQL Editor Supabase Anda terlebih dahulu untuk membuat tabel chat!");
+        } else {
+          throw insertError;
+        }
+        return;
+      }
+
+      if (newRoom) {
+        await supabase.from('chat_messages').insert({
+          room_id: newRoom.id,
+          sender_id: supabaseUser.id,
+          message: `Halo, saya tertarik dengan produk Anda: *${product.name}*`
+        });
+
+        router.push(`/chat?room=${newRoom.id}`);
+      }
+    } catch (err: any) {
+      alert("Gagal memulai obrolan: " + err.message);
+    } finally {
+      setIsStartingChat(false);
+    }
+  };
+
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href)
@@ -455,8 +536,12 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   <span style={{ display: "flex", gap: "6px", alignItems: "center" }}><ShoppingBag size={14} color="var(--primary)" /> <strong>{product.sold}</strong> Sales</span>
                   <span style={{ display: "flex", gap: "6px", alignItems: "center" }}><Download size={14} color="var(--primary)" /> <strong>{product.downloads}</strong> Downloads</span>
                 </div>
-                <button className={styles.sellerBtnChat}>
-                  Chat Seller
+                <button 
+                  className={styles.sellerBtnChat} 
+                  onClick={handleChatSeller}
+                  disabled={isStartingChat}
+                >
+                  {isStartingChat ? "Memulai..." : "Chat Seller"}
                 </button>
               </div>
             </div>

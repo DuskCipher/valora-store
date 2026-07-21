@@ -16,6 +16,7 @@ interface Store {
   address: string;
   bank_details: any;
   status: string;
+  is_verified?: boolean;
   created_at: string;
   profiles: { full_name: string; email: string };
 }
@@ -112,6 +113,22 @@ export default function AdminTokoPage() {
     }
   };
 
+  const handleToggleVerified = async (s: Store) => {
+    const newStatus = !s.is_verified;
+    if (!confirm(`Apakah Anda yakin ingin ${newStatus ? 'memberikan' : 'mencabut'} Centang Biru untuk toko ini?`)) return;
+
+    try {
+      await supabase
+        .from("stores")
+        .update({ is_verified: newStatus })
+        .eq("id", s.id);
+        
+      fetchStores();
+    } catch (e: any) {
+      alert("Gagal memperbarui status verifikasi: " + e.message);
+    }
+  };
+
   if (isLoading) return <div style={{ padding: 40 }}>Loading...</div>;
   if (isAdmin === false) return <div style={{ padding: 40 }}>Akses Ditolak</div>;
 
@@ -182,12 +199,35 @@ export default function AdminTokoPage() {
                     </span>
                   </td>
                   <td style={{ padding: 16 }}>
-                    {(s.status === 'pending' || !s.status) && (
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={() => handleApprove(s)} style={{ padding: "6px 12px", background: "var(--primary)", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, fontWeight: "bold" }}>ACC</button>
-                        <button onClick={() => handleReject(s.id)} style={{ padding: "6px 12px", background: "var(--danger)", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, fontWeight: "bold" }}>Tolak</button>
-                      </div>
-                    )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {(s.status === 'pending' || !s.status) && (
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button onClick={() => handleApprove(s)} style={{ padding: "6px 12px", background: "var(--primary)", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, fontWeight: "bold" }}>ACC</button>
+                          <button onClick={() => handleReject(s.id)} style={{ padding: "6px 12px", background: "var(--danger)", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, fontWeight: "bold" }}>Tolak</button>
+                        </div>
+                      )}
+                      {s.status === 'approved' && (
+                        <button 
+                          onClick={() => handleToggleVerified(s)} 
+                          style={{ 
+                            padding: "6px 12px", 
+                            background: s.is_verified ? "var(--bg-input)" : "#3b82f6", 
+                            color: s.is_verified ? "var(--text-main)" : "white", 
+                            border: s.is_verified ? "1px solid var(--border-color)" : "none", 
+                            borderRadius: 4, 
+                            cursor: "pointer", 
+                            fontSize: 12, 
+                            fontWeight: "bold",
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          {s.is_verified ? "Batal Centang Biru" : "Beri Centang Biru"}
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
