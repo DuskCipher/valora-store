@@ -143,7 +143,7 @@ export default function AdminPesananPage() {
         if (prodId) {
           const { data: product } = await supabase
             .from("products")
-            .select("store_id")
+            .select("id, store_id, sold")
             .eq("id", prodId)
             .single();
 
