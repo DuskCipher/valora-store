@@ -352,6 +352,7 @@ export default function AdminDashboardPage() {
             )}
           </tbody>
         </table>
+      </div>
     </div>
   );
 }
