@@ -158,7 +158,7 @@ export default function AdminDashboardPage() {
     <div style={{ padding: "24px" }}>
       <h1 style={{ fontSize: 24, fontWeight: "bold", marginBottom: 24, color: "var(--text-main)" }}>Dashboard Utama</h1>
       
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: 20, marginBottom: 32 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20, marginBottom: 32 }}>
         
         <div style={{ background: "var(--bg-card)", padding: 24, borderRadius: 12, border: "1px solid var(--border-color)", display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ background: "rgba(16, 185, 129, 0.1)", padding: 16, borderRadius: "50%", color: "var(--primary)" }}>
@@ -202,7 +202,7 @@ export default function AdminDashboardPage() {
 
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 24, marginBottom: 32 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginBottom: 32 }}>
         
         <div style={{ background: "var(--bg-card)", padding: 24, borderRadius: 12, border: "1px solid var(--border-color)" }}>
           <h2 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, color: "var(--text-main)" }}>
@@ -256,7 +256,7 @@ export default function AdminDashboardPage() {
 
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 24, marginBottom: 32 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginBottom: 32 }}>
         <div style={{ background: "var(--bg-card)", padding: 24, borderRadius: 12, border: "1px solid var(--border-color)" }}>
           <h2 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, color: "var(--text-main)" }}>
             <Activity size={20} /> Distribusi Status Transaksi
