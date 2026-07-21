@@ -10,20 +10,20 @@ import checkoutStyles from "../checkout/page.module.css";
 import styles from "./page.module.css";
 
 const BANK_TRANSFER_METHODS = [
-  { id: "bca", name: "BCA", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/200px-Bank_Central_Asia.svg.png", fee: 0 },
-  { id: "bri", name: "BRI", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/200px-BANK_BRI_logo.svg.png", fee: 0 },
-  { id: "bni", name: "BNI", logo: "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/200px-BNI_logo.svg.png", fee: 0 },
-  { id: "mandiri", name: "Mandiri", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/200px-Bank_Mandiri_logo_2016.svg.png", fee: 0 },
-  { id: "bsi", name: "BSI", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/BSI_logo.svg/200px-BSI_logo.svg.png", fee: 0 },
-  { id: "jago", name: "Bank Jago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Bank_Jago_logo.svg/200px-Bank_Jago_logo.svg.png", fee: 0 },
-  { id: "seabank", name: "SeaBank", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Seabank_logo.png/200px-Seabank_logo.png", fee: 0 },
+  { id: "bca", name: "BCA", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg", fee: 0 },
+  { id: "bri", name: "BRI", logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/BANK_BRI_logo.svg", fee: 0 },
+  { id: "bni", name: "BNI", logo: "https://upload.wikimedia.org/wikipedia/id/5/55/BNI_logo.svg", fee: 0 },
+  { id: "mandiri", name: "Mandiri", logo: "https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg", fee: 0 },
+  { id: "bsi", name: "BSI", logo: "https://upload.wikimedia.org/wikipedia/commons/8/8e/BSI_logo.svg", fee: 0 },
+  { id: "jago", name: "Bank Jago", logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Bank_Jago_logo.svg", fee: 0 },
+  { id: "seabank", name: "SeaBank", logo: "https://upload.wikimedia.org/wikipedia/commons/7/77/Seabank_logo.png", fee: 0 },
 ];
 
 const EWALLET_METHODS = [
-  { id: "qris", name: "QRIS", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/200px-Logo_QRIS.svg.png", fee: 0 },
-  { id: "dana", name: "DANA", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Dana_logo.svg/200px-Dana_logo.svg.png", fee: 0 },
-  { id: "gopay", name: "GoPay", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/200px-Gopay_logo.svg.png", fee: 0 },
-  { id: "ovo", name: "OVO", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_ovo_purple.svg/200px-Logo_ovo_purple.svg.png", fee: 0 },
+  { id: "qris", name: "QRIS", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg", fee: 0 },
+  { id: "dana", name: "DANA", logo: "https://upload.wikimedia.org/wikipedia/commons/7/72/Dana_logo.svg", fee: 0 },
+  { id: "gopay", name: "GoPay", logo: "https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg", fee: 0 },
+  { id: "ovo", name: "OVO", logo: "https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg", fee: 0 },
 ];
 
 export default function TopUpPage() {

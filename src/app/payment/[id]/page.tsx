@@ -32,17 +32,17 @@ interface PaymentAccount {
 }
 
 const PAYMENT_LOGOS: Record<string, string> = {
-  "BCA": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/200px-Bank_Central_Asia.svg.png",
-  "BRI": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/200px-BANK_BRI_logo.svg.png",
-  "BNI": "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/200px-BNI_logo.svg.png",
-  "Mandiri": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/200px-Bank_Mandiri_logo_2016.svg.png",
-  "BSI": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/BSI_logo.svg/200px-BSI_logo.svg.png",
-  "Bank Jago": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Bank_Jago_logo.svg/200px-Bank_Jago_logo.svg.png",
-  "SeaBank": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Seabank_logo.png/200px-Seabank_logo.png",
-  "QRIS": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/200px-Logo_QRIS.svg.png",
-  "DANA": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Dana_logo.svg/200px-Dana_logo.svg.png",
-  "GoPay": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/200px-Gopay_logo.svg.png",
-  "OVO": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_ovo_purple.svg/200px-Logo_ovo_purple.svg.png"
+  "BCA": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg",
+  "BRI": "https://upload.wikimedia.org/wikipedia/commons/6/68/BANK_BRI_logo.svg",
+  "BNI": "https://upload.wikimedia.org/wikipedia/id/5/55/BNI_logo.svg",
+  "Mandiri": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg",
+  "BSI": "https://upload.wikimedia.org/wikipedia/commons/8/8e/BSI_logo.svg",
+  "Bank Jago": "https://upload.wikimedia.org/wikipedia/commons/6/68/Bank_Jago_logo.svg",
+  "SeaBank": "https://upload.wikimedia.org/wikipedia/commons/7/77/Seabank_logo.png",
+  "QRIS": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg",
+  "DANA": "https://upload.wikimedia.org/wikipedia/commons/7/72/Dana_logo.svg",
+  "GoPay": "https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg",
+  "OVO": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg"
 };
 
 export default function PaymentDetailPage({ params }: { params: { id: string } }) {

@@ -193,7 +193,7 @@ export const ShopSidebar: React.FC<ShopSidebarProps> = ({
           {menuItems
             .filter(item => {
               if (storeStatus === 'approved' || storeStatus === 'active') return true;
-              return item.id === 'dashboard' || item.id === 'pengaturan';
+              return item.id === 'pengaturan'; // Hide dashboard if not approved
             })
             .map((item) => {
             const isActive = pathname === item.href || (item.subItems && item.subItems.some(sub => pathname === sub.href));
