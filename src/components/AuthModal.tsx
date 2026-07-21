@@ -360,7 +360,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLogin }
                     <a href="#" className={styles.termsLink}>Kebijakan Privasi</a>.
                   </span>
                 </label>
-              )}
+              ) : null}
             </>
           )}
 
