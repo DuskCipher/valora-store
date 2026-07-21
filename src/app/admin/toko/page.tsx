@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
+import { Eye, Trash2, X } from "lucide-react";
 
 interface Store {
   id: string;
@@ -28,6 +29,9 @@ export default function AdminTokoPage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [stores, setStores] = useState<Store[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const isAuth = localStorage.getItem("zaystore_admin_auth");
@@ -129,6 +133,25 @@ export default function AdminTokoPage() {
     }
   };
 
+  const handleDeleteStore = async (id: string) => {
+    if (!confirm("PERINGATAN: Menghapus toko akan menghapus semua data terkait secara permanen! Lanjutkan?")) return;
+
+    try {
+      setIsLoading(true);
+      const { error } = await supabase
+        .from("stores")
+        .delete()
+        .eq("id", id);
+        
+      if (error) throw error;
+      alert("Toko berhasil dihapus!");
+      fetchStores();
+    } catch (e: any) {
+      alert("Gagal menghapus toko: " + e.message);
+      setIsLoading(false);
+    }
+  };
+
   if (isLoading) return <div style={{ padding: 40 }}>Loading...</div>;
   if (isAdmin === false) return <div style={{ padding: 40 }}>Akses Ditolak</div>;
 
@@ -227,6 +250,26 @@ export default function AdminTokoPage() {
                           {s.is_verified ? "Batal Centang Biru" : "Beri Centang Biru"}
                         </button>
                       )}
+                      
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button 
+                          onClick={() => {
+                            setSelectedStore(s);
+                            setIsModalOpen(true);
+                          }} 
+                          style={{ flex: 1, padding: "6px 12px", background: "var(--bg-main)", color: "var(--text-main)", border: "1px solid var(--border-color)", borderRadius: 4, cursor: "pointer", fontSize: 12, fontWeight: "bold", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+                        >
+                          <Eye size={14} /> Detail
+                        </button>
+                        
+                        <button 
+                          onClick={() => handleDeleteStore(s.id)} 
+                          style={{ padding: "6px 12px", background: "#fee2e2", color: "#991b1b", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, fontWeight: "bold", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+                          title="Hapus Toko"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -242,6 +285,85 @@ export default function AdminTokoPage() {
           </table>
         </div>
       </div>
+
+      {isModalOpen && selectedStore && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: 'var(--bg-card)', borderRadius: 12, width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-xl)', position: 'relative' }}>
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+            >
+              <X size={24} />
+            </button>
+            
+            <div style={{ padding: '24px', borderBottom: '1px solid var(--border-color)' }}>
+              <h2 style={{ fontSize: 20, fontWeight: 'bold', color: 'var(--text-main)', marginBottom: 16 }}>Detail Pendaftaran Toko</h2>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                {selectedStore.logo_url ? (
+                  <img src={selectedStore.logo_url} alt="Logo" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border-color)' }} />
+                ) : (
+                  <div style={{ width: 80, height: 80, borderRadius: '50%', backgroundColor: '#e2e8f0' }} />
+                )}
+                <div>
+                  <h3 style={{ fontSize: 18, fontWeight: 'bold', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {selectedStore.name}
+                    {selectedStore.is_verified && <span style={{ color: '#3b82f6', fontSize: 14 }}>✓ Verified</span>}
+                  </h3>
+                  <div style={{ color: 'var(--text-muted)', fontSize: 14, marginBottom: 4 }}>Pemilik: {selectedStore.profiles?.full_name} ({selectedStore.profiles?.email})</div>
+                  <span style={{ 
+                    padding: "4px 8px", 
+                    borderRadius: 4, 
+                    backgroundColor: selectedStore.status === 'approved' ? '#d1fae5' : selectedStore.status === 'rejected' ? '#fee2e2' : '#fef3c7',
+                    color: selectedStore.status === 'approved' ? '#065f46' : selectedStore.status === 'rejected' ? '#991b1b' : '#b45309',
+                    fontWeight: "bold",
+                    fontSize: 12,
+                    display: 'inline-block'
+                  }}>
+                    Status: {(selectedStore.status || 'pending').toUpperCase()}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div>
+                <h4 style={{ fontSize: 14, fontWeight: 'bold', color: 'var(--text-main)', marginBottom: 8 }}>Deskripsi Toko</h4>
+                <div style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.5, background: 'var(--bg-main)', padding: 12, borderRadius: 8 }}>
+                  {selectedStore.description || '-'}
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div>
+                  <h4 style={{ fontSize: 14, fontWeight: 'bold', color: 'var(--text-main)', marginBottom: 8 }}>Lokasi & Alamat</h4>
+                  <div style={{ fontSize: 14, color: 'var(--text-muted)', background: 'var(--bg-main)', padding: 12, borderRadius: 8 }}>
+                    <div><strong>Provinsi:</strong> {selectedStore.province || '-'}</div>
+                    <div><strong>Kota/Kab:</strong> {selectedStore.city || '-'}</div>
+                    <div style={{ marginTop: 8 }}><strong>Alamat Lengkap:</strong><br />{selectedStore.address || '-'}</div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 style={{ fontSize: 14, fontWeight: 'bold', color: 'var(--text-main)', marginBottom: 8 }}>Rekening Penarikan Dana</h4>
+                  <div style={{ fontSize: 14, color: 'var(--text-muted)', background: 'var(--bg-main)', padding: 12, borderRadius: 8 }}>
+                    {selectedStore.bank_details ? (
+                      <>
+                        <div style={{ fontWeight: "600", color: "var(--primary)", fontSize: 16, marginBottom: 4 }}>{selectedStore.bank_details.bank_name}</div>
+                        <div><strong>No. Rekening:</strong> {selectedStore.bank_details.account_number}</div>
+                        <div><strong>Atas Nama:</strong> {selectedStore.bank_details.account_name}</div>
+                      </>
+                    ) : "-"}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Mendaftar pada: {new Date(selectedStore.created_at).toLocaleString('id-ID')}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
