@@ -168,6 +168,13 @@ export default function AdminPesananPage() {
                 .update({ balance: currentStoreBalance + totalEarning })
                 .eq("id", product.store_id);
             }
+
+            // Update product sold count
+            const currentSold = Number(product.sold || 0);
+            await supabase
+              .from("products")
+              .update({ sold: currentSold + quantity })
+              .eq("id", product.id);
           }
         }
       }

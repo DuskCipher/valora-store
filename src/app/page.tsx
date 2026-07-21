@@ -87,45 +87,10 @@ export default function Home() {
           slug: item.slug
         }));
         
-        // Compute real sales and ratings from transactions
-        try {
-          const { data: txs } = await supabase
-            .from("transactions")
-            .select("type, status, details")
-            .in("type", ["order", "review"]);
-            
-          if (txs) {
-            const salesMap: Record<string, number> = {};
-            const ratingsMap: Record<string, { total: number, count: number }> = {};
-            
-            txs.forEach((t: any) => {
-              if (t.type === "order" && t.status === "approved") {
-                const items = t.details?.items || [];
-                items.forEach((item: any) => {
-                  const pid = item.product?.id || item.id;
-                  if (pid) {
-                    salesMap[pid] = (salesMap[pid] || 0) + (item.quantity || 1);
-                  }
-                });
-              } else if (t.type === "review") {
-                const pid = t.details?.product_id;
-                if (pid) {
-                  if (!ratingsMap[pid]) ratingsMap[pid] = { total: 0, count: 0 };
-                  ratingsMap[pid].total += (t.details?.rating || 5);
-                  ratingsMap[pid].count += 1;
-                }
-              }
-            });
-            
-            mappedProducts = mappedProducts.map(p => ({
-              ...p,
-              sold: Math.max(p.sold, salesMap[p.id] || 0),
-              rating: ratingsMap[p.id] ? Number((ratingsMap[p.id].total / ratingsMap[p.id].count).toFixed(1)) : p.rating
-            }));
-          }
-        } catch (e) {
-          console.error("Error computing real sales:", e);
-        }
+        // Real sales computation via client-side fetch is removed
+        // karena menyebabkan bug "0 terjual" pada user yang belum login
+        // akibat kebijakan RLS (Row Level Security) yang memblokir akses ke tabel transaksi.
+        // Sekarang kita akan menggunakan kolom 'sold' langsung dari tabel products!
         
         setProducts(mappedProducts);
       }
