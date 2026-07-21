@@ -150,13 +150,13 @@ export const HeroCarousel: React.FC = () => {
                 style={slide.is_full_width ? { padding: 0 } : {}}
               >
                 {slide.is_full_width ? (
-                  <div style={{ width: '100%', height: '100%', borderRadius: '16px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '100%', borderRadius: '16px', overflow: 'hidden', backgroundColor: 'var(--bg-input)' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {slide.image && (
                       <img
                         src={slide.image}
                         alt={slide.subtitle || 'Banner Promo'}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }}
+                        style={{ width: '100%', height: '100%', objectFit: 'fill', borderRadius: '16px' }}
                       />
                     )}
                   </div>
