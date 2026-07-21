@@ -364,9 +364,9 @@ export const Header: React.FC = () => {
           <Link href="/" className={`${styles.bottomNavItem} ${styles.active}`} onClick={() => setSearchTerm("")}>
             <Home size={20} />
           </Link>
-          <button className={styles.bottomNavItem}>
+          <Link href="/chat" className={styles.bottomNavItem}>
             <MessageCircle size={20} />
-          </button>
+          </Link>
           <button className={styles.bottomNavItem} onClick={() => setIsCartOpen(true)}>
             <ShoppingCart size={20} />
             {totalCartItems > 0 && (
