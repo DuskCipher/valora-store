@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('products')
         .select(`
           *,
@@ -33,6 +33,26 @@ export default function Home() {
         `)
         .eq('is_active', true)
         .order('created_at', { ascending: false });
+
+      // Fallback if is_verified column doesn't exist in Supabase yet
+      if (error && error.message.includes('is_verified')) {
+        const fallback = await supabase
+          .from('products')
+          .select(`
+            *,
+            stores (
+              name,
+              logo_url
+            ),
+            categories (
+              name
+            )
+          `)
+          .eq('is_active', true)
+          .order('created_at', { ascending: false });
+        data = fallback.data;
+        error = fallback.error;
+      }
 
       if (error) {
         console.error("Error fetching products:", error);
