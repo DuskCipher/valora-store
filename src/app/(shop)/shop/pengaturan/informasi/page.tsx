@@ -111,6 +111,26 @@ export default function InformasiDasarPage() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (!authUser) throw new Error("Not authenticated");
 
+      // Periksa dan buat profil jika belum ada akibat rate limit saat signup
+      const { data: profileCheck } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', authUser.id)
+        .single();
+        
+      if (!profileCheck) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            {
+              id: authUser.id,
+              full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'User',
+              avatar_url: authUser.user_metadata?.avatar_url || ''
+            }
+          ]);
+        if (profileError) console.error("Gagal membuat profil otomatis:", profileError);
+      }
+
       let logoUrl: string | undefined;
 
       // Upload logo jika ada file baru

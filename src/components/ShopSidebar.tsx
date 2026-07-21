@@ -104,6 +104,7 @@ export const ShopSidebar: React.FC<ShopSidebarProps> = ({
   };
 
   const [storeBalance, setStoreBalance] = useState(0);
+  const [storeStatus, setStoreStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStoreBalance = async () => {
@@ -111,11 +112,12 @@ export const ShopSidebar: React.FC<ShopSidebarProps> = ({
       try {
         const { data } = await supabase
           .from("stores")
-          .select("balance")
+          .select("balance, status")
           .eq("owner_id", supabaseUser.id)
           .single();
         if (data) {
           setStoreBalance(data.balance || 0);
+          setStoreStatus(data.status);
         }
       } catch (err) {
         console.error(err);
@@ -188,7 +190,12 @@ export const ShopSidebar: React.FC<ShopSidebarProps> = ({
         {/* Menu Area */}
         {!effectiveIsCollapsed && <p className={styles.menuLabel}>MENU</p>}
         <nav className={styles.nav}>
-          {menuItems.map((item) => {
+          {menuItems
+            .filter(item => {
+              if (storeStatus === 'approved' || storeStatus === 'active') return true;
+              return item.id === 'dashboard' || item.id === 'pengaturan';
+            })
+            .map((item) => {
             const isActive = pathname === item.href || (item.subItems && item.subItems.some(sub => pathname === sub.href));
             const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
             const isExpanded = expandedMenus[item.id];
