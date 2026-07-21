@@ -139,6 +139,8 @@ export const Header: React.FC = () => {
                           pathname?.startsWith('/profile-settings') ||
                           pathname?.startsWith('/security');
 
+  const isShopArea = pathname?.startsWith('/shop');
+
   const handleProfileClick = () => {
     if (isLoggedIn) {
       setIsProfileOpen(!isProfileOpen);
@@ -214,17 +216,19 @@ export const Header: React.FC = () => {
             </div>
           )}
 
-          {isLoggedIn ? (
-            <Link href="/chat" className={`${styles.iconBtn} ${styles.desktopOnly}`} aria-label="Messages" style={{ textDecoration: 'none' }}>
-              <MessageSquare size={20} />
-              {unreadMsgCount > 0 && (
-                <span className={`${styles.badge} ${styles.badgeDanger}`}>{unreadMsgCount}</span>
-              )}
-            </Link>
-          ) : (
-            <button className={`${styles.iconBtn} ${styles.desktopOnly}`} aria-label="Messages" onClick={() => setIsAuthModalOpen(true)}>
-              <MessageSquare size={20} />
-            </button>
+          {!isShopArea && (
+            isLoggedIn ? (
+              <Link href="/chat" className={`${styles.iconBtn} ${styles.desktopOnly}`} aria-label="Messages" style={{ textDecoration: 'none' }}>
+                <MessageSquare size={20} />
+                {unreadMsgCount > 0 && (
+                  <span className={`${styles.badge} ${styles.badgeDanger}`}>{unreadMsgCount}</span>
+                )}
+              </Link>
+            ) : (
+              <button className={`${styles.iconBtn} ${styles.desktopOnly}`} aria-label="Messages" onClick={() => setIsAuthModalOpen(true)}>
+                <MessageSquare size={20} />
+              </button>
+            )
           )}
 
 
@@ -364,9 +368,11 @@ export const Header: React.FC = () => {
           <Link href="/" className={`${styles.bottomNavItem} ${styles.active}`} onClick={() => setSearchTerm("")}>
             <Home size={20} />
           </Link>
-          <Link href="/chat" className={styles.bottomNavItem}>
-            <MessageCircle size={20} />
-          </Link>
+          {!isShopArea && (
+            <Link href="/chat" className={styles.bottomNavItem}>
+              <MessageCircle size={20} />
+            </Link>
+          )}
           <button className={styles.bottomNavItem} onClick={() => setIsCartOpen(true)}>
             <ShoppingCart size={20} />
             {totalCartItems > 0 && (
